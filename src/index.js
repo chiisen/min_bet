@@ -1,5 +1,7 @@
+const clc = require("cli-color")
+
 const { denom, betLevel, minBetList, cryDef } = require("./data")
-const { swapMap } = require("./helpers")
+const { swapMap, denomMap } = require("./helpers")
 
 minBetList.map((mb) => {
   const checkDenom = new Map()
@@ -31,7 +33,8 @@ minBetList.map((mb) => {
   console.log("================================================")
   checkDenom.forEach((k, v) => {
     if (k >= 10) {
-      console.log(`cryDef=${cryDef} minBet=${mb} ` + res.get(v))
+      const denom = res.get(v)
+      console.log(clc.magenta(`cryDef=${cryDef} minBet=${mb} `) + clc.red(denom[0]) + " " + denomMap.get(denom[0]))
     }
   })
 })
