@@ -1,4 +1,5 @@
 import clc = require("cli-color")
+import fs = require("fs")
 
 import { denomToIndexMap } from "./data"
 
@@ -66,4 +67,24 @@ export function denomArray(num: number, isSort = false) {
 
   console.log("面額陣列: " + clc.yellow(IdxArr))
   return IdxArr
+}
+
+/**
+ * 插入文字到 alter.sql
+ *
+ * @param {*} subPath
+ * @param {*} insertText
+ */
+export function appendAlterByFileName(subPath, fileName, insertText) {
+  fs.appendFileSync(`${subPath}/${fileName}`, insertText, "utf8")
+}
+
+/**
+ * 寫入 alter.sql
+ *
+ * @param {*} subPath
+ * @param {*} insertText
+ */
+export function writeAlter(subPath, insertText) {
+  fs.writeFileSync(`${subPath}/alter.sql`, insertText, "utf8")
 }
