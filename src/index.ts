@@ -31,6 +31,15 @@ const excelMinBetOutput_ = []
 excelMinBetOutput_.push(["cryDef", "minBet", ...denomTitleLIst, "denomIndex"])
 excelMinBetOutput_.push(["", "", ...denomIndexTitleList, ""])
 
+/**
+ * Min Bet 中的面額最大範圍區間
+ *
+ * key: 面額
+ *
+ * value: 累計次數
+ */
+const maxRangeMinBetDenom_ = new Map()
+
 minBetList.map((minBet_) => {
   /**
    * Bet Level 1-10 的計次，滿 10 次面額才算是有效
@@ -39,7 +48,7 @@ minBetList.map((minBet_) => {
    *
    * value: Bet Level 累計次數，要 10 次才算有效
    */
-  const checkDenomRatioByBetLevelList = new Map()
+  const checkDenomRatioByBetLevelListMap = new Map()
 
   betLevelList.map((betLevel_) => {
     if (!denomToRatioMap) {
@@ -61,12 +70,12 @@ minBetList.map((minBet_) => {
 
       //安全範圍 0.6 到 200
       if (result_ > 0.6 && result_ < 200) {
-        const existDenomRatio_ = checkDenomRatioByBetLevelList.get(denomRatio_)
+        const existDenomRatio_ = checkDenomRatioByBetLevelListMap.get(denomRatio_)
         let minBetDenomCount = 1
         if (existDenomRatio_) {
           minBetDenomCount += existDenomRatio_
         }
-        checkDenomRatioByBetLevelList.set(denomRatio_, minBetDenomCount)
+        checkDenomRatioByBetLevelListMap.set(denomRatio_, minBetDenomCount)
 
         //const denom = ratioToDenomMap.get(denomRatio_)
         //console.log(`denomRatio_:${denomRatio_} denom:"${denom}" minBetDenomCount:${minBetDenomCount}`)
@@ -81,7 +90,7 @@ minBetList.map((minBet_) => {
    */
   let denomIdxArray_ = ""
 
-  checkDenomRatioByBetLevelList.forEach((betLevelCount_, denomRatio_) => {
+  checkDenomRatioByBetLevelListMap.forEach((betLevelCount_, denomRatio_) => {
     //Bet Level 累計次數，要 10 次才算有效
     if (betLevelCount_ >= 10) {
       const denom = ratioToDenomArrayMap.get(denomRatio_)
@@ -91,6 +100,13 @@ minBetList.map((minBet_) => {
       }
       const denomStr = denom[0] //面額字串
       denomIdxArray_ += denomIdxArray_ === "" ? denomToIndexMap.get(denomStr) : "," + denomToIndexMap.get(denomStr)
+
+      const existMaxDenomCount = maxRangeMinBetDenom_.get(denomStr)
+      let maxDenomCount = 1
+      if (existMaxDenomCount) {
+        maxDenomCount += existMaxDenomCount
+      }
+      maxRangeMinBetDenom_.set(denomStr, maxDenomCount)
     }
   })
 
@@ -108,7 +124,7 @@ minBetList.map((minBet_) => {
       console.error(`convertDenomRatio_ is null(denomString_: ${denomString_})`)
       return
     }
-    const existBetLvCount_ = checkDenomRatioByBetLevelList.get(convertDenomRatio_)
+    const existBetLvCount_ = checkDenomRatioByBetLevelListMap.get(convertDenomRatio_)
     //Bet Level 累計次數，要 10 次才算有效
     if (existBetLvCount_ && existBetLvCount_ >= 10) {
       const denomSub_ = ratioToDenomArrayMap.get(convertDenomRatio_)
@@ -128,5 +144,30 @@ minBetList.map((minBet_) => {
   )
   excelMinBetOutput_.push([cryDef, minBet_, ...minBetDenomStrArray_, denomIdxArray_])
 })
+
+/**
+ * 最大範圍的面額索引陣列 1...
+ */
+let maxDenomIdxArray_ = ""
+let maxRangeMinBetDenomList = []
+denomIndexTitleList.map((denomIdx_: string) => {
+  const denom_ = denomIdxToDenomStrArrayMap.get(denomIdx_)
+  if (!denom_) {
+    console.error(`denom_ is null(denomIdx_: ${denomIdx_})`)
+    return
+  }
+  const denomString_ = denom_[0]
+  const denomCount_ = maxRangeMinBetDenom_.get(denomString_)
+  if (denomCount_ > 0) {
+    maxRangeMinBetDenomList.push(denomString_)
+
+    maxDenomIdxArray_ += maxDenomIdxArray_ === "" ? denomToIndexMap.get(denomString_) : "," + denomToIndexMap.get(denomString_)
+
+  } else {
+    maxRangeMinBetDenomList.push("")
+  }
+})
+
+excelMinBetOutput_.push([cryDef, "MaxRangeDenom", ...maxRangeMinBetDenomList, maxDenomIdxArray_])
 
 writeSinglePageExcel("./minBet.xlsx", "minBetSheet", excelMinBetOutput_)
