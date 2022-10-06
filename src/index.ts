@@ -1,5 +1,6 @@
 import clc = require("cli-color")
-import { off } from "process"
+import fs = require("fs")
+import dotenv = require("dotenv")
 
 import {
   denomToRatioMap,
@@ -14,6 +15,16 @@ import {
 } from "./data"
 import { writeSinglePageExcel } from "./excel"
 import { writeAlter } from "./helpers"
+
+const envFile = ".env"
+if (!fs.existsSync(".env")) {
+  console.error(clc.red(`\n 讀檔失敗，找不到 ${envFile}`))
+  process.exit(1)
+}
+
+dotenv.config()
+
+console.log("ENV: " + process.env["ENV"]) //ENV
 
 /**
  *
@@ -148,12 +159,16 @@ minBetList.map((minBet_) => {
   const array = denomIdxArray_.split(",")
   if (array.length >= 2) {
     defaultDenomIdx = array[1]
-  }
-  else{
+  } else {
     defaultDenomIdx = array[0]
   }
   console.log(
-    clc.magenta(`cryDef=${cryDef} minBet_=${minBet_} `) + clc.red(minBetDenomStrArray_) + "," + denomIdxArray_ + " default:" + defaultDenomIdx
+    clc.magenta(`cryDef=${cryDef} minBet_=${minBet_} `) +
+      clc.red(minBetDenomStrArray_) +
+      "," +
+      denomIdxArray_ +
+      " default:" +
+      defaultDenomIdx
   )
   excelMinBetOutput_.push([cryDef, minBet_, ...minBetDenomStrArray_, denomIdxArray_])
 

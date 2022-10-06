@@ -27,6 +27,11 @@
   },
   "dependencies": {
     "@types/node-xlsx": "^0.15.3",
+    "cli-color": "^2.0.3",
+    "dotenv": "^16.0.3",
     "node-xlsx": "^0.21.0"
+  },
+  "directories": {
+    "test": "test"
   }
 }
