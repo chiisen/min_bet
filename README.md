@@ -15,6 +15,11 @@ npm i cli-color
 npm run build
 ```
 
+# 執行方法
+- 修改 .\src\data.ts 裡面的參數
+- 修改【匯率】 cryDef
+
+
 # 輸出
 alter.sql
 minBet.xlsx
