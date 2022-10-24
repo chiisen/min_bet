@@ -284,7 +284,8 @@ FROM game.game_setting gs
 JOIN game.games g 
 ON g.gameId = gs.gameId
 WHERE cid = @targetCid
-) t;`
+) t
+on duplicate key update Denom = t.pb, DefaultDenomId = t.dp;`
 
 writeAlter("./", sql_)
 
