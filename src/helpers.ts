@@ -1,7 +1,7 @@
 import clc = require("cli-color")
 import fs = require("fs")
 
-import { denomToIndexMap } from "./data"
+import { denomToIndexMap, denomIdxToDenomStrArrayMap } from "./data"
 
 /**
  * 交換 Map 的 Key 與 Value
@@ -91,4 +91,19 @@ export function writeAlter(subPath, insertText, fileName: string = undefined) {
     alterName_ = fileName
   }
   fs.writeFileSync(`${subPath}/${alterName_}`, insertText, "utf8")
+}
+
+/**
+ * 【面額索引】轉成【面額字串】
+ *
+ * @returns
+ */
+export function convertDenomIdxToDenomStr(denomIdx) {
+  const denomIdxNumber_ = Number(denomIdx)
+  const denom_ = denomIdxToDenomStrArrayMap.get(denomIdxNumber_)
+  if (!denom_) {
+    console.error(`denom_ is null(denomIdx_: ${denomIdx})`)
+    return
+  }
+  return denom_[0]
 }

@@ -11,9 +11,15 @@ import {
   denomIdxToDenomStrArrayMap,
 } from "./data"
 import { writeSinglePageExcel } from "./excel"
-
+import { convertDenomIdxToDenomStr } from "./helpers"
 import { processSQL } from "./sql"
 
+/**
+ * 主迴圈
+ *
+ * @param targetCurrency
+ * @param cryDef
+ */
 export function mainLoop(targetCurrency: string, cryDef: number) {
   /**
    * Excel 的輸出資料陣列
@@ -21,7 +27,7 @@ export function mainLoop(targetCurrency: string, cryDef: number) {
   const excelMinBetOutput_ = []
 
   //Excel標題
-  excelMinBetOutput_.push(["cryDef", "minBet", ...denomTitleLIst, "denomIndex"])
+  excelMinBetOutput_.push(["cryDef", "minBet", ...denomTitleLIst, "denomIndex", "defaultDenomIndex", "defaultDenomIndexString", "count"])
   excelMinBetOutput_.push(["", "", ...denomIndexTitleList, ""])
 
   /**
@@ -109,12 +115,7 @@ export function mainLoop(targetCurrency: string, cryDef: number) {
     const minBetDenomStrArray_ = []
     denomIndexTitleList.map((denomIdx_: string) => {
       //denomIdx 轉 denomRatio
-      const denom_ = denomIdxToDenomStrArrayMap.get(denomIdx_)
-      if (!denom_) {
-        console.error(`denom_ is null(denomIdx_: ${denomIdx_})`)
-        return
-      }
-      const denomString_ = denom_[0]
+      const denomString_ = convertDenomIdxToDenomStr(denomIdx_)
       const convertDenomRatio_ = denomToRatioMap.get(denomString_)
       if (!convertDenomRatio_) {
         console.error(`convertDenomRatio_ is null(denomString_: ${denomString_})`)
@@ -142,15 +143,20 @@ export function mainLoop(targetCurrency: string, cryDef: number) {
     } else {
       defaultDenomIdx = array[0]
     }
+
+    //@note 取得面額索引的字串
+    const defaultDenomString_ = convertDenomIdxToDenomStr(defaultDenomIdx)
+
     console.log(
       clc.magenta(`cryDef=${cryDef} minBet_=${minBet_} `) +
         clc.red(minBetDenomStrArray_) +
         "," +
         denomIdxArray_ +
         " default:" +
-        defaultDenomIdx
+        defaultDenomIdx +
+        `(${defaultDenomString_})`
     )
-    excelMinBetOutput_.push([cryDef, minBet_, ...minBetDenomStrArray_, denomIdxArray_])
+    excelMinBetOutput_.push([cryDef, minBet_, ...minBetDenomStrArray_, denomIdxArray_, defaultDenomIdx, defaultDenomString_, array.length])
 
     denomIdxByMinBetListMap_.set(minBet_, denomIdxArray_)
 
