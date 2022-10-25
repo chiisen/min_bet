@@ -85,6 +85,10 @@ export function appendAlterByFileName(subPath, fileName, insertText) {
  * @param {*} subPath
  * @param {*} insertText
  */
-export function writeAlter(subPath, insertText) {
-  fs.writeFileSync(`${subPath}/alter.sql`, insertText, "utf8")
+export function writeAlter(subPath, insertText, fileName: string = undefined) {
+  let alterName_ = "alter.sql"
+  if (fileName) {
+    alterName_ = fileName
+  }
+  fs.writeFileSync(`${subPath}/${alterName_}`, insertText, "utf8")
 }

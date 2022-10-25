@@ -1,9 +1,9 @@
 import { writeAlter } from "./helpers"
 
-export function processSQL(denomIdxByMinBetListMap_, defaultDenomIdxByMinBetListMap_) {
+export function processSQL(targetCurrency: string, denomIdxByMinBetListMap_, defaultDenomIdxByMinBetListMap_) {
   const sql_ = `
 SET @targetCid = "換上指定Hall的CidS";
-SET @currency = "換上指定幣別代號";
+SET @currency = "${targetCurrency}";
 
 
 SET @p1 = "${denomIdxByMinBetListMap_.get(1)}";
@@ -74,7 +74,7 @@ WHERE cid = @targetCid
 ) t
 on duplicate key update Denom = t.pb, DefaultDenomId = t.dp;`
 
-  writeAlter("./output/", sql_)
+  writeAlter("./output/", sql_, `alter_${targetCurrency}.sql`)
 
-  console.log(sql_)
+  //console.log(sql_)
 }

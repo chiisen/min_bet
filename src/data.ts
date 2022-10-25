@@ -135,5 +135,3 @@ export const ratioToDenomArrayMap = swapMap(denomToRatioMap)
  */
 export const denomIdxToDenomStrArrayMap = swapMap(denomToIndexMap)
 
-// 匯率
-export const cryDef = 1955.92

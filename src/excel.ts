@@ -3,6 +3,45 @@ import fs = require("fs")
 import clc = require("cli-color")
 
 /**
+ * 檢查是否為數值
+ * @param {*} val
+ * @returns
+ */
+export function isNumeric(val: string): boolean {
+  return /^-?\d+$/.test(val)
+}
+
+/**
+ * 讀取 Excel
+ *
+ * @param {string} fileName
+ */
+export function getExcel(fileName: string, isLog = false, sheetIndex: 0 | string) {
+  console.log(clc.cyan("excel-parse start"))
+
+  const excel = []
+  const sheets = xlsx.parse(fileName)
+  let sheet = undefined
+  const sheetIndexString = sheetIndex.toString()
+  if (isNumeric(sheetIndexString)) {
+    sheet = sheets[sheetIndex]
+  } else {
+    sheet = sheets.find((x) => x.name == sheetIndexString)
+  }
+  // 輸出每行內容
+  sheet.data.forEach((row) => {
+    // 陣列格式, 根據不同的索引取數據
+    excel.push(row)
+    if (isLog) {
+      console.log(row)
+    }
+  })
+
+  console.log(clc.cyan("excel-parse end"))
+  return excel
+}
+
+/**
  * 寫入單頁 Excel 檔案
  *
  * @param {string} fileName
