@@ -2,9 +2,11 @@ import clc = require("cli-color")
 import fs = require("fs")
 import dotenv = require("dotenv")
 
-import { getExcel, isNumeric } from "./excel"
+import { getExcel } from "./excel"
 
 import { mainLoop } from "./mainLoop"
+
+import { minBet } from "./minBet"
 
 const envFile = ".env"
 if (!fs.existsSync(".env")) {
@@ -26,8 +28,23 @@ export function hello(name: string): string {
 }
 
 const excelInputFileName = "./input/匯率表.xlsx"
+const excelMinBetInputFileName = "./input/minBet.xlsx"
+const excelGameMinBetInputFileName = "./input/gameMinBet.xlsx"
 
 const exchangeRateSheet = getExcel(excelInputFileName, false, "匯率表")
+
+const currencyList = []
+
+exchangeRateSheet.forEach((row) => {
+  const currency = row[0]
+  const cryDef = row[1]
+  if (cryDef != "匯率") {
+    currencyList.push(currency)
+  }
+})
+
+minBet(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName)
+
 exchangeRateSheet.forEach((row) => {
   const currency = row[0]
   const cryDef = row[1]
@@ -36,6 +53,7 @@ exchangeRateSheet.forEach((row) => {
   console.log(`${currency}-${cryDef}-${desc}`)
 
   if (cryDef != "匯率") {
-    mainLoop(currency, cryDef)
+    const isCalculate = false
+    mainLoop(currency, cryDef, isCalculate)
   }
 })
