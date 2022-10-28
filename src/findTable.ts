@@ -36,17 +36,15 @@ export function findTable(
 
   minBetDenomStrArray_.push(...excelDenomStringList_)
 
-  if (denomList_.length >= 2) {
-    defaultDenomIdx_ = denomList_[1]
-  } else {
-    defaultDenomIdx_ = denomList_[0]
-  }
+  const defKey_ = `${minBet_}-${targetCurrency}`
+  const default_ = minBetCurrencyToDefaultDenomIdxMap.get(defKey_)
+  const defIdx_ = default_ - 1
+
+  defaultDenomIdx_ = denomList_[defIdx_]
 
   const defaultDenomString_ = convertDenomIdxToDenomStr(defaultDenomIdx_)
 
-  //@note 【新】寫入 denom 設定值
-  const defKey_ = `${minBet_}-${targetCurrency}`
-  const default_ = minBetCurrencyToDefaultDenomIdxMap.get(defKey_)
+  //@note 【新】寫入 denom 設定值  
   excelMinBetOutput_.push([
     cryDef,
     minBet_,
@@ -59,9 +57,5 @@ export function findTable(
 
   denomIdxByMinBetListMap_.set(minBet_, denomIdxArray_)
 
-  if (denomList_.length >= 2) {
-    defaultDenomIdxByMinBetListMap_.set(minBet_, denomList_[1])
-  } else {
-    defaultDenomIdxByMinBetListMap_.set(minBet_, denomList_[0])
-  }
+  defaultDenomIdxByMinBetListMap_.set(minBet_, defaultDenomIdx_)
 }
