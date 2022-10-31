@@ -1,5 +1,5 @@
 import { convertDenomIdxToDenomStr } from "./helpers"
-import { minBetToExcelDenomListMap, minBetCurrencyToDefaultDenomIdxMap } from "./minBet"
+import { minBetToExcelDenomListMap, minBetCurrencyToDefaultDenomNthMap } from "./minBet"
 
 export function findTable(
   minBet_,
@@ -37,7 +37,7 @@ export function findTable(
   minBetDenomStrArray_.push(...excelDenomStringList_)
 
   const keyDefaultMinBetCurrency_ = `${minBet_}-${targetCurrency}`
-  const defaultDenomNth_ = minBetCurrencyToDefaultDenomIdxMap.get(keyDefaultMinBetCurrency_)
+  const defaultDenomNth_ = minBetCurrencyToDefaultDenomNthMap.get(keyDefaultMinBetCurrency_)
   const defaultDenomNthIndex_ = defaultDenomNth_ - 1
 
   defaultDenomIdx_ = denomList_[defaultDenomNthIndex_]

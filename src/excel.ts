@@ -17,7 +17,7 @@ export function isNumeric(val: string): boolean {
  * @param {string} fileName
  */
 export function getExcel(fileName: string, isLog = false, sheetIndex: 0 | string) {
-  console.log(clc.cyan("excel-parse start"))
+  console.log(clc.cyan(`"${fileName}" excel-parse start`))
 
   const excel = []
   const sheets = xlsx.parse(fileName)
@@ -37,7 +37,7 @@ export function getExcel(fileName: string, isLog = false, sheetIndex: 0 | string
     }
   })
 
-  console.log(clc.cyan("excel-parse end"))
+  console.log(clc.cyan(`"${fileName}" excel-parse end`))
   return excel
 }
 

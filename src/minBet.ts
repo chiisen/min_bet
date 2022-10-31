@@ -13,12 +13,12 @@ export const gameIdCurrencyToExcelDenomListMap = new Map()
 /**
  * key: minBetId 與 currency 回傳 denom 索引
  */
-export const minBetCurrencyToDefaultDenomMap = new Map()
+export const minBetCurrencyToDefaultDenomIndexMap = new Map()
 
 /**
  * key: minBetId 與 currency 回傳第幾個 denom
  */
-export const minBetCurrencyToDefaultDenomIdxMap = new Map()
+export const minBetCurrencyToDefaultDenomNthMap = new Map()
 
 export function minBet(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName) {
   initAllMinBets(excelMinBetInputFileName)
@@ -127,12 +127,12 @@ function initMinBet(minBetId, minBetSheet) {
 
       const keyDefaultMinBetCurrency_ = `${minBetId}-${currency}`
       if (defaultDenomNth_ === 0) {
-        minBetCurrencyToDefaultDenomMap.set(keyDefaultMinBetCurrency_, denomList_[0])
-        minBetCurrencyToDefaultDenomIdxMap.set(keyDefaultMinBetCurrency_, 1)
+        minBetCurrencyToDefaultDenomIndexMap.set(keyDefaultMinBetCurrency_, denomList_[0])
+        minBetCurrencyToDefaultDenomNthMap.set(keyDefaultMinBetCurrency_, 1)
       } else {
         const defaultDenomNthIndex_ = defaultDenomNth_ - 1
-        minBetCurrencyToDefaultDenomMap.set(keyDefaultMinBetCurrency_, denomList_[defaultDenomNthIndex_])
-        minBetCurrencyToDefaultDenomIdxMap.set(keyDefaultMinBetCurrency_, defaultDenomNth_)
+        minBetCurrencyToDefaultDenomIndexMap.set(keyDefaultMinBetCurrency_, denomList_[defaultDenomNthIndex_])
+        minBetCurrencyToDefaultDenomNthMap.set(keyDefaultMinBetCurrency_, defaultDenomNth_)
       }
 
       const excelDenomList_ = convertExcelToExcelDenomList(excelDenomArray_)
