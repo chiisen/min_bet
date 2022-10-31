@@ -20,9 +20,9 @@ export const minBetCurrencyToDefaultDenomIdxMap = new Map()
 export function minBet(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName) {
   initAllMinBets(excelMinBetInputFileName)
 
-  const minBet_ = getExcel(excelGameMinBetInputFileName, false, "MIN_BET")
+  const gameMinBet_ = getExcel(excelGameMinBetInputFileName, false, "MIN_BET")
 
-  minBet_.forEach((row) => {
+  gameMinBet_.forEach((row) => {
     const gameId = row[0]
     const minBet = row[3]
 
