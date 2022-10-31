@@ -107,17 +107,17 @@ function initMinBet(minBetId, minBetSheet) {
         row[31], //1 100000:1
       ]
 
-      const default_ = row[32]
+      const defaultNth_ = row[32]//第幾個denom
       const denomList_ = convertExcelToDenomList(excelDenomArray_)
 
       const defKey_ = `${minBetId}-${currency}`
-      if (default_ === 0) {
+      if (defaultNth_ === 0) {
         minBetCurrencyToDefaultDenomMap.set(defKey_, denomList_[0])
         minBetCurrencyToDefaultDenomIdxMap.set(defKey_, 1)
       } else {
-        const defIdx_ = default_ - 1
+        const defIdx_ = defaultNth_ - 1
         minBetCurrencyToDefaultDenomMap.set(defKey_, denomList_[defIdx_])
-        minBetCurrencyToDefaultDenomIdxMap.set(defKey_, default_)
+        minBetCurrencyToDefaultDenomIdxMap.set(defKey_, defaultNth_)
       }
 
       const excelDenomList_ = convertExcelToExcelDenomList(excelDenomArray_)
