@@ -1,5 +1,8 @@
 import { getExcel } from "./excel"
 
+/**
+ * key: minBet 與 currency 回傳 EXCEL 格式的 denom
+ */
 export const minBetToExcelDenomListMap = new Map()
 
 /**
