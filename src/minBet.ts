@@ -1,8 +1,20 @@
 import { getExcel } from "./excel"
 
 export const minBetToExcelDenomListMap = new Map()
-export const gameIdAndCurrencyToExcelDenomListMap = new Map()
+
+/**
+ * key: gameId 與 currency 回傳 EXCEL 格式的 denom
+ */
+export const gameIdCurrencyToExcelDenomListMap = new Map()
+
+/**
+ * key: minBetId 與 currency 回傳 denom 索引
+ */
 export const minBetCurrencyToDefaultDenomMap = new Map()
+
+/**
+ * key: minBetId 與 currency 回傳第幾個 denom
+ */
 export const minBetCurrencyToDefaultDenomIdxMap = new Map()
 
 export function minBet(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName) {
@@ -15,17 +27,17 @@ export function minBet(currencyList, excelMinBetInputFileName, excelGameMinBetIn
     const minBet = row[3]
 
     if (gameId != "gameId") {
-      currencyList.forEach((c) => {
-        const key_ = `${minBet}-${c}`
+      currencyList.forEach((cur) => {
+        const key_ = `${minBet}-${cur}`
         const excelDenomList_ = minBetToExcelDenomListMap.get(key_)
         if (excelDenomList_) {
-          const key2_ = `${gameId}-${c}`
-          if (gameIdAndCurrencyToExcelDenomListMap.get(key2_)) {
-            console.log(`${gameId}-${c} 重複了`)
+          const keyGameIdCurrency_ = `${gameId}-${cur}`
+          if (gameIdCurrencyToExcelDenomListMap.get(keyGameIdCurrency_)) {
+            console.log(`${gameId}-${cur} 重複了`)
           }
-          gameIdAndCurrencyToExcelDenomListMap.set(key2_, excelDenomList_)
+          gameIdCurrencyToExcelDenomListMap.set(keyGameIdCurrency_, excelDenomList_)
         } else {
-          console.log(`${gameId}-${c} 找不到`)
+          console.log(`${gameId}-${cur} 找不到`)
         }
       })
     }
@@ -107,7 +119,7 @@ function initMinBet(minBetId, minBetSheet) {
         row[31], //1 100000:1
       ]
 
-      const defaultNth_ = row[32]//第幾個denom
+      const defaultNth_ = row[32] //第幾個denom
       const denomList_ = convertExcelToDenomList(excelDenomArray_)
 
       const defKey_ = `${minBetId}-${currency}`

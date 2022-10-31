@@ -37,8 +37,8 @@ export function findTable(
   minBetDenomStrArray_.push(...excelDenomStringList_)
 
   const defKey_ = `${minBet_}-${targetCurrency}`
-  const default_ = minBetCurrencyToDefaultDenomIdxMap.get(defKey_)
-  const defIdx_ = default_ - 1
+  const defaultNth_ = minBetCurrencyToDefaultDenomIdxMap.get(defKey_)
+  const defIdx_ = defaultNth_ - 1
 
   defaultDenomIdx_ = denomList_[defIdx_]
 
@@ -52,7 +52,7 @@ export function findTable(
     denomIdxArray_,
     defaultDenomIdx_,
     defaultDenomString_,
-    `default_: ${default_} / Count: ${denomList_.length}`,
+    `default_: ${defaultNth_} / Count: ${denomList_.length}`,
   ])
 
   denomIdxByMinBetListMap_.set(minBet_, denomIdxArray_)
