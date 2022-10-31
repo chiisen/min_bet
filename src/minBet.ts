@@ -127,8 +127,8 @@ function initMinBet(minBetId, minBetSheet) {
         minBetCurrencyToDefaultDenomMap.set(keyDefaultMinBetCurrency_, denomList_[0])
         minBetCurrencyToDefaultDenomIdxMap.set(keyDefaultMinBetCurrency_, 1)
       } else {
-        const defIdx_ = defaultDenomNth_ - 1
-        minBetCurrencyToDefaultDenomMap.set(keyDefaultMinBetCurrency_, denomList_[defIdx_])
+        const defaultDenomNthIndex_ = defaultDenomNth_ - 1
+        minBetCurrencyToDefaultDenomMap.set(keyDefaultMinBetCurrency_, denomList_[defaultDenomNthIndex_])
         minBetCurrencyToDefaultDenomIdxMap.set(keyDefaultMinBetCurrency_, defaultDenomNth_)
       }
 
