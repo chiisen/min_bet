@@ -28,8 +28,8 @@ export function minBet(currencyList, excelMinBetInputFileName, excelGameMinBetIn
 
     if (gameId != "gameId") {
       currencyList.forEach((cur) => {
-        const key_ = `${minBet}-${cur}`
-        const excelDenomList_ = minBetToExcelDenomListMap.get(key_)
+        const keyMinBetCurrency_ = `${minBet}-${cur}`
+        const excelDenomList_ = minBetToExcelDenomListMap.get(keyMinBetCurrency_)
         if (excelDenomList_) {
           const keyGameIdCurrency_ = `${gameId}-${cur}`
           if (gameIdCurrencyToExcelDenomListMap.get(keyGameIdCurrency_)) {
@@ -122,23 +122,23 @@ function initMinBet(minBetId, minBetSheet) {
       const defaultNth_ = row[32] //第幾個denom
       const denomList_ = convertExcelToDenomList(excelDenomArray_)
 
-      const defKey_ = `${minBetId}-${currency}`
+      const keyDefaultMinBetCurrency_ = `${minBetId}-${currency}`
       if (defaultNth_ === 0) {
-        minBetCurrencyToDefaultDenomMap.set(defKey_, denomList_[0])
-        minBetCurrencyToDefaultDenomIdxMap.set(defKey_, 1)
+        minBetCurrencyToDefaultDenomMap.set(keyDefaultMinBetCurrency_, denomList_[0])
+        minBetCurrencyToDefaultDenomIdxMap.set(keyDefaultMinBetCurrency_, 1)
       } else {
         const defIdx_ = defaultNth_ - 1
-        minBetCurrencyToDefaultDenomMap.set(defKey_, denomList_[defIdx_])
-        minBetCurrencyToDefaultDenomIdxMap.set(defKey_, defaultNth_)
+        minBetCurrencyToDefaultDenomMap.set(keyDefaultMinBetCurrency_, denomList_[defIdx_])
+        minBetCurrencyToDefaultDenomIdxMap.set(keyDefaultMinBetCurrency_, defaultNth_)
       }
 
       const excelDenomList_ = convertExcelToExcelDenomList(excelDenomArray_)
 
-      const key_ = `${minBetId}-${currency}`
-      if (minBetToExcelDenomListMap.get(key_)) {
-        console.log(`key_: ${key_}-重複了`)
+      const keyMinBetIdCurrency_ = `${minBetId}-${currency}`
+      if (minBetToExcelDenomListMap.get(keyMinBetIdCurrency_)) {
+        console.log(`key_: ${keyMinBetIdCurrency_}-重複了`)
       }
-      minBetToExcelDenomListMap.set(key_, excelDenomList_)
+      minBetToExcelDenomListMap.set(keyMinBetIdCurrency_, excelDenomList_)
     }
   })
 }

@@ -12,8 +12,8 @@ export function findTable(
   defaultDenomIdxByMinBetListMap_
 ) {
   let defaultDenomIdx_ = ""
-  const key_ = `${minBet_}-${targetCurrency}`
-  const excelDenomList_ = minBetToExcelDenomListMap.get(key_)
+  const keyMinBetCurrency_ = `${minBet_}-${targetCurrency}`
+  const excelDenomList_ = minBetToExcelDenomListMap.get(keyMinBetCurrency_)
   const excelDenomStringList_ = []
   denomIdxArray_ = ""
   const denomList_ = []
@@ -36,8 +36,8 @@ export function findTable(
 
   minBetDenomStrArray_.push(...excelDenomStringList_)
 
-  const defKey_ = `${minBet_}-${targetCurrency}`
-  const defaultNth_ = minBetCurrencyToDefaultDenomIdxMap.get(defKey_)
+  const keyDefaultMinBetCurrency_ = `${minBet_}-${targetCurrency}`
+  const defaultNth_ = minBetCurrencyToDefaultDenomIdxMap.get(keyDefaultMinBetCurrency_)
   const defIdx_ = defaultNth_ - 1
 
   defaultDenomIdx_ = denomList_[defIdx_]
