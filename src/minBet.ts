@@ -1,3 +1,5 @@
+import clc = require("cli-color")
+
 import { getExcel } from "./excel"
 
 /**
@@ -144,6 +146,10 @@ function initMinBet(minBetId, minBetSheet) {
  * @returns
  */
 function convertExcelToExcelDenomList(excelDenomArray) {
+  if (!excelDenomArray) {
+    console.log(clc.red(`Null excelDenomArray`))
+    return null
+  }
   const denomList_ = []
   let denomIdx_ = 29
   excelDenomArray.forEach((r) => {
@@ -164,6 +170,10 @@ function convertExcelToExcelDenomList(excelDenomArray) {
  * @returns
  */
 function convertExcelToDenomString(denomArray) {
+  if (!denomArray) {
+    console.log(clc.red(`Null denomArray`))
+    return null
+  }
   let denomIdx_ = 29
   let denomIdxsString_ = ""
   denomArray.forEach((r) => {
@@ -185,6 +195,10 @@ function convertExcelToDenomString(denomArray) {
  * @returns
  */
 function convertListToDenomString(denomArray) {
+  if (!denomArray) {
+    console.log(clc.red(`Null denomArray`))
+    return null
+  }
   let denomIdxsString_ = ""
   denomArray.forEach((r) => {
     if (r) {
