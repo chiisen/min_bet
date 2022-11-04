@@ -11,11 +11,6 @@ export const minBetToExcelDenomListMap = new Map()
 export const gameIdCurrencyToExcelDenomListMap = new Map()
 
 /**
- * key: minBetId 與 currency 回傳 denom 索引
- */
-export const minBetCurrencyToDefaultDenomIndexMap = new Map()
-
-/**
  * key: minBetId 與 currency 回傳第幾個 denom
  */
 export const minBetCurrencyToDefaultDenomNthMap = new Map()
@@ -123,15 +118,11 @@ function initMinBet(minBetId, minBetSheet) {
       ]
 
       const defaultDenomNth_ = row[32] //第幾個denom
-      const denomList_ = convertExcelToDenomList(excelDenomArray_)
 
       const keyDefaultMinBetCurrency_ = `${minBetId}-${currency}`
       if (defaultDenomNth_ === 0) {
-        minBetCurrencyToDefaultDenomIndexMap.set(keyDefaultMinBetCurrency_, denomList_[0])
         minBetCurrencyToDefaultDenomNthMap.set(keyDefaultMinBetCurrency_, 1)
       } else {
-        const defaultDenomNthIndex_ = defaultDenomNth_ - 1
-        minBetCurrencyToDefaultDenomIndexMap.set(keyDefaultMinBetCurrency_, denomList_[defaultDenomNthIndex_])
         minBetCurrencyToDefaultDenomNthMap.set(keyDefaultMinBetCurrency_, defaultDenomNth_)
       }
 
@@ -144,24 +135,6 @@ function initMinBet(minBetId, minBetSheet) {
       minBetToExcelDenomListMap.set(keyMinBetIdCurrency_, excelDenomList_)
     }
   })
-}
-
-/**
- * EXCEL 轉成 denom 陣列
- *
- * @param denomArray 要EXCEL的資料才行
- * @returns
- */
-function convertExcelToDenomList(denomArray) {
-  const denomList_ = []
-  let denomIdx_ = 1
-  denomArray.forEach((r) => {
-    if (r) {
-      denomList_.push(denomIdx_)
-    }
-    denomIdx_++
-  })
-  return denomList_
 }
 
 /**
