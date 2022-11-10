@@ -23,3 +23,10 @@ npm run build
 # 輸出
 alter_幣別.sql
 minBet_幣別.xlsx
+
+# 安裝本地套件
+```bash=
+npm install --save D:\github\chiisen\58-toolkit.js
+```
+
+
