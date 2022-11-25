@@ -1,5 +1,9 @@
 # min_bet
-計算 min bet
+依據每個遊戲 minBet 填入正確的 denom
+![SQL語法](https://i.imgur.com/0lkyZWD.png)
+- 有下面幾種狀態:
+  - 正常
+  - 預設為 1:1(denom沒有的話，也要新增1:1，再把預設值填1:1，例如:VA等等)
 
 # 安裝
 ```bash=

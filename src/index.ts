@@ -1,6 +1,8 @@
 import clc = require("cli-color")
 import fs = require("fs")
 import dotenv = require("dotenv")
+const { file } = require("58-toolkit")
+const { emptyDir } = file
 
 import { getExcel } from "./excel"
 
@@ -26,6 +28,8 @@ console.log("ENV: " + process.env["ENV"]) //ENV
 export function hello(name: string): string {
   return `Hello ${name}`
 }
+
+emptyDir(`./output`)
 
 const excelInputFileName = "./input/匯率表.xlsx"
 const excelMinBetInputFileName = "./input/minBet.xlsx"
