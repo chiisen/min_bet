@@ -73,6 +73,7 @@ export function mainLoop(targetCurrency: string, cryDef: number, isCalculate: bo
         defaultDenomIdxByMinBetListMap_
       )
     } else {
+      //一般是讀表，因為表格有很多人為填寫的例外操作
       findTable(
         minBet_,
         cryDef,

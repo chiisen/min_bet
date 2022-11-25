@@ -1,5 +1,8 @@
 import { convertDenomIdxToDenomStr } from "./helpers"
 import { minBetToExcelDenomListMap, minBetCurrencyToDefaultDenomNthMap } from "./minBet"
+import { default_denom_1by1 } from "./index"
+
+console.log("DEFAULT_DENOM_1BY1: " + default_denom_1by1) //DEFAULT_DENOM_1BY1
 
 export function findTable(
   minBet_,
@@ -14,6 +17,13 @@ export function findTable(
   let defaultDenomIdx_ = ""
   const keyMinBetCurrency_ = `${minBet_}-${targetCurrency}`
   const excelDenomList_ = minBetToExcelDenomListMap.get(keyMinBetCurrency_)
+  //判斷 denom 預設是否為 1:1
+  if (default_denom_1by1) {
+    const denom_1by1_index_ = 15 - 1 //索引為14(陣列由 0 開始)
+    if (excelDenomList_[denom_1by1_index_] === ``) {
+      excelDenomList_[denom_1by1_index_] = 15
+    }
+  }
   const excelDenomStringList_ = []
   denomIdxArray_ = ""
   const denomList_ = []
@@ -38,13 +48,18 @@ export function findTable(
 
   const keyDefaultMinBetCurrency_ = `${minBet_}-${targetCurrency}`
   const defaultDenomNth_ = minBetCurrencyToDefaultDenomNthMap.get(keyDefaultMinBetCurrency_)
-  const defaultDenomNthIndex_ = defaultDenomNth_ - 1
+  //判斷 denom 預設是否為 1:1
+  if (default_denom_1by1) {
+    defaultDenomIdx_ = `15` // 預設為 1:1
+  } else {
+    const defaultDenomNthIndex_ = defaultDenomNth_ - 1
 
-  defaultDenomIdx_ = denomList_[defaultDenomNthIndex_]
+    defaultDenomIdx_ = denomList_[defaultDenomNthIndex_]
+  }
 
   const defaultDenomString_ = convertDenomIdxToDenomStr(defaultDenomIdx_)
 
-  //@note 【新】寫入 denom 設定值  
+  //@note 【新】寫入 denom 設定值
   excelMinBetOutput_.push([
     cryDef,
     minBet_,

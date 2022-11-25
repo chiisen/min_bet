@@ -20,6 +20,10 @@ dotenv.config()
 
 console.log("ENV: " + process.env["ENV"]) //ENV
 
+export const default_denom_1by1 = /true/i.test(process.env["DEFAULT_DENOM_1BY1"])
+console.log("DEFAULT_DENOM_1BY1: " + process.env["DEFAULT_DENOM_1BY1"]) //DEFAULT_DENOM_1BY1
+console.log("DEFAULT_DENOM_1BY1: " + default_denom_1by1) //DEFAULT_DENOM_1BY1
+
 /**
  *
  * @param name 單元測試用
@@ -57,7 +61,7 @@ exchangeRateSheet.forEach((row) => {
   console.log(`${currency}-${cryDef}-${desc}`)
 
   if (cryDef != "匯率") {
-    const isCalculate = false
+    const isCalculate = false //一般都是讀表(此值為false)，因為表格有很多人為填寫的例外操作
     mainLoop(currency, cryDef, isCalculate)
   }
 })
