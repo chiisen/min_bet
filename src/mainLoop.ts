@@ -58,7 +58,7 @@ export function mainLoop(targetCurrency: string, cryDef: number, isCalculate: bo
 
     calculateBetLevelList(minBet_, cryDef, checkDenomRatioByBetLevelListMap_)
 
-    console.log("================================================")
+    console.log(`【minBet: ${minBet_}】================================================`)
 
     //@note 儲存 EXCEL 格式的 denom
     const minBetDenomStrArray_ = []

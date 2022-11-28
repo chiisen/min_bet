@@ -72,11 +72,28 @@ export function findTable(
       const i8DenomList_ = i8ToString_.split(",")
       const denomList_ = denomIdxArray_.split(",")
       if (!mergeSortArray(i8DenomList_, denomList_, `include`)) {
-        console.warn(`${gameId_} ${targetCurrency} 不在 I8 設定範圍內`)
+        let overRange_ = []
+        denomList_.forEach((x) => {
+          let notInclude_ = true
+          i8DenomList_.forEach((y) => {
+            if (x === y) {
+              notInclude_ = false
+            }
+          })
+          if(notInclude_){
+            overRange_.push(x)
+          }
+        })
+
+        let overRangeString_ = ""
+        overRange_.forEach((x) => {
+          overRangeString_ += x.toString() + ','
+        })
+
+        console.warn(`${gameId_} ${targetCurrency} ${denomIdxArray_} 不在 I8 設定範圍內 ${i8ToString_}\n超出 I8 設定: ${overRangeString_}`)
       }
-    }
-    else{
-      console.warn(`${gameId_} ${targetCurrency} 沒有資料`)
+    } else {
+      console.warn(`gameId: ${gameId_} currency: ${targetCurrency} I8 沒有資料`)
     }
   })
 
