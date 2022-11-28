@@ -4,11 +4,11 @@ import dotenv = require("dotenv")
 const { file } = require("58-toolkit")
 const { emptyDir } = file
 
-import { getExcel } from "./excel"
-
+import { initI8Denom } from "./i8Denom"
 import { mainLoop } from "./mainLoop"
 
-import { minBet } from "./minBet"
+import { initMinBetMainLoop } from "./minBet"
+import { initCurrencyList, currencyList, currencyDataList } from "./currencyList"
 
 const envFile = ".env"
 if (!fs.existsSync(".env")) {
@@ -25,43 +25,39 @@ console.log("DEFAULT_DENOM_1BY1: " + process.env["DEFAULT_DENOM_1BY1"]) //DEFAUL
 console.log("DEFAULT_DENOM_1BY1: " + default_denom_1by1) //DEFAULT_DENOM_1BY1
 
 /**
+ * 單元測試用
  *
- * @param name 單元測試用
+ * @param name 名子
  * @returns
  */
 export function hello(name: string): string {
   return `Hello ${name}`
 }
 
+/**
+ * 清空輸出資料夾
+ */
 emptyDir(`./output`)
 
 const excelInputFileName = "./input/匯率表.xlsx"
 const excelMinBetInputFileName = "./input/minBet.xlsx"
 const excelGameMinBetInputFileName = "./input/gameMinBet.xlsx"
+const excelI8DenomInputFileName = "./input/i8_game_denom_setting.xlsx"
 
-const exchangeRateSheet = getExcel(excelInputFileName, false, "匯率表")
+initMinBetMainLoop(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName)
 
-const currencyList = []
+/**
+ * 載入 I8 的 Denom 設定
+ */
+initI8Denom(excelI8DenomInputFileName)
 
-exchangeRateSheet.forEach((row) => {
-  const currency = row[0]
-  const cryDef = row[1]
-  if (cryDef != "匯率") {
-    currencyList.push(currency)
-  }
-})
+initCurrencyList(excelInputFileName)
 
-minBet(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName)
+currencyDataList.forEach((row) => {
+  console.log(`${row.currency}-${row.cryDef}-${row.desc}`)
 
-exchangeRateSheet.forEach((row) => {
-  const currency = row[0]
-  const cryDef = row[1]
-  const desc = row[2]
-
-  console.log(`${currency}-${cryDef}-${desc}`)
-
-  if (cryDef != "匯率") {
+  if (row.cryDef != "匯率") {
     const isCalculate = false //一般都是讀表(此值為false)，因為表格有很多人為填寫的例外操作
-    mainLoop(currency, cryDef, isCalculate)
+    mainLoop(row.currency, row.cryDef, isCalculate)
   }
 })

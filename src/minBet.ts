@@ -1,6 +1,7 @@
 import clc = require("cli-color")
 
-import { getExcel } from "./excel"
+const { excel } = require("58-toolkit")
+const { getExcel } = excel
 
 /**
  * key: minBet 與 currency 回傳 EXCEL 格式的 denom
@@ -17,27 +18,40 @@ export const gameIdCurrencyToExcelDenomListMap = new Map()
  */
 export const minBetCurrencyToDefaultDenomNthMap = new Map()
 
-export function minBet(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName) {
+/**
+ * 輸入 gameId 回傳 minBet
+ */
+export const gameIdMinBetMap = new Map()
+
+/**
+ *
+ * @param currencyList
+ * @param excelMinBetInputFileName
+ * @param excelGameMinBetInputFileName
+ */
+export function initMinBetMainLoop(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName) {
   initAllMinBets(excelMinBetInputFileName)
 
   const gameMinBet_ = getExcel(excelGameMinBetInputFileName, false, "MIN_BET")
 
   gameMinBet_.forEach((row) => {
-    const gameId = row[0]
-    const minBet = row[3]
+    const gameId_ = row[0]
+    const minBet_ = row[3]
 
-    if (gameId != "gameId") {
+    if (gameId_ != "gameId") {
+      gameIdMinBetMap.set(gameId_, minBet_)
+
       currencyList.forEach((cur) => {
-        const keyMinBetCurrency_ = `${minBet}-${cur}`
+        const keyMinBetCurrency_ = `${minBet_}-${cur}`
         const excelDenomList_ = minBetToExcelDenomListMap.get(keyMinBetCurrency_)
         if (excelDenomList_) {
-          const keyGameIdCurrency_ = `${gameId}-${cur}`
+          const keyGameIdCurrency_ = `${gameId_}-${cur}`
           if (gameIdCurrencyToExcelDenomListMap.get(keyGameIdCurrency_)) {
-            console.log(`${gameId}-${cur} 重複了`)
+            console.log(`${gameId_}-${cur} 重複了`)
           }
           gameIdCurrencyToExcelDenomListMap.set(keyGameIdCurrency_, excelDenomList_)
         } else {
-          console.log(`${gameId}-${cur} 找不到`)
+          console.log(`${gameId_}-${cur} 找不到`)
         }
       })
     }
@@ -161,32 +175,6 @@ function convertExcelToExcelDenomList(excelDenomArray) {
     denomIdx_--
   })
   return denomList_
-}
-
-/**
- * EXCEL 轉成 denom 字串
- *
- * @param denomArray 要EXCEL的資料才行
- * @returns
- */
-function convertExcelToDenomString(denomArray) {
-  if (!denomArray) {
-    console.log(clc.red(`Null denomArray`))
-    return null
-  }
-  let denomIdx_ = 29
-  let denomIdxsString_ = ""
-  denomArray.forEach((r) => {
-    if (r) {
-      if (denomIdxsString_ === "") {
-        denomIdxsString_ += denomIdx_.toString()
-      } else {
-        denomIdxsString_ += "," + denomIdx_.toString()
-      }
-    }
-    denomIdx_--
-  })
-  return denomIdxsString_
 }
 
 /**

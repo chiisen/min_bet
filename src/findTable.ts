@@ -1,8 +1,10 @@
-import { convertDenomIdxToDenomStr } from "./helpers"
-import { minBetToExcelDenomListMap, minBetCurrencyToDefaultDenomNthMap } from "./minBet"
-import { default_denom_1by1 } from "./index"
+const { data } = require("58-toolkit")
+const { mergeSortArray } = data
 
-console.log("DEFAULT_DENOM_1BY1: " + default_denom_1by1) //DEFAULT_DENOM_1BY1
+import { convertDenomIdxToDenomStr } from "./helpers"
+import { minBetToExcelDenomListMap, minBetCurrencyToDefaultDenomNthMap, gameIdMinBetMap } from "./minBet"
+import { default_denom_1by1 } from "./index"
+import { i8DenomMap } from "./i8Denom"
 
 export function findTable(
   minBet_,
@@ -60,6 +62,24 @@ export function findTable(
   const defaultDenomString_ = convertDenomIdxToDenomStr(defaultDenomIdx_)
 
   //@note 【新】寫入 denom 設定值
+
+  gameIdMinBetMap.forEach((v, gameId_) => {
+    const keyGameIdCurrency_ = `${gameId_}-${targetCurrency}`
+    const i8_ = i8DenomMap.get(keyGameIdCurrency_)
+    //I8 必須要包含 denomIdxArray_
+    if (i8_) {
+      const i8ToString_ = `${i8_.denom}`
+      const i8DenomList_ = i8ToString_.split(",")
+      const denomList_ = denomIdxArray_.split(",")
+      if (!mergeSortArray(i8DenomList_, denomList_, `include`)) {
+        console.warn(`${gameId_} ${targetCurrency} 不在 I8 設定範圍內`)
+      }
+    }
+    else{
+      console.warn(`${gameId_} ${targetCurrency} 沒有資料`)
+    }
+  })
+
   excelMinBetOutput_.push([
     cryDef,
     minBet_,

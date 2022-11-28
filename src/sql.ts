@@ -1,4 +1,5 @@
-import { writeAlter } from "./helpers"
+const { file } = require("58-toolkit")
+const { writeAlter } = file
 
 export function processSQL(targetCurrency: string, denomIdxByMinBetListMap_, defaultDenomIdxByMinBetListMap_) {
   const sql_ = `

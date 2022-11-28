@@ -1,14 +1,6 @@
-import { swapMap } from "./helpers"
-
-/**
- * Bet Level 陣列
- */
-export const betLevelList = new Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-
-/**
- * Min Bet 陣列
- */
-export const minBetList = new Array(1, 3, 5, 9, 10, 15, 20, 25, 30, 40, 50, 88)
+const { helpers, data } = require("58-toolkit")
+const { swapMap } = helpers
+const { betLevelList, minBetList } = data
 
 /**
  * 面額轉成比率
@@ -126,12 +118,6 @@ denomTitleLIst.map((denom: string) => {
 }, {})
 
 /**
- * 面額【比率】轉成【字串】的面額
- */
-export const ratioToDenomArrayMap = swapMap(denomToRatioMap)
-
-/**
  * 面額【索引】轉成【字串】的面額
  */
 export const denomIdxToDenomStrArrayMap = swapMap(denomToIndexMap)
-

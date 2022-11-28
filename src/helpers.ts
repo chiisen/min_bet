@@ -4,19 +4,6 @@ import fs = require("fs")
 import { denomToIndexMap, denomIdxToDenomStrArrayMap } from "./data"
 
 /**
- * 交換 Map 的 Key 與 Value
- *
- * @param x
- * @return @note回傳回去的 value 會是陣列，目前還未解決
- */
-export const swapMap = (x) => {
-  return [...x.entries()].reduce((acc, [k, v]) => {
-    acc.has(v) ? acc.set(v, acc.get(v).concat(k)) : acc.set(v, [k])
-    return acc
-  }, new Map())
-}
-
-/**
  * 將面額【字串】陣列轉成【數值】陣列
  *
  * @param {*} denomStr
@@ -77,20 +64,6 @@ export function denomArray(num: number, isSort = false) {
  */
 export function appendAlterByFileName(subPath, fileName, insertText) {
   fs.appendFileSync(`${subPath}/${fileName}`, insertText, "utf8")
-}
-
-/**
- * 寫入 alter.sql
- *
- * @param {*} subPath
- * @param {*} insertText
- */
-export function writeAlter(subPath, insertText, fileName: string = undefined) {
-  let alterName_ = "alter.sql"
-  if (fileName) {
-    alterName_ = fileName
-  }
-  fs.writeFileSync(`${subPath}/${alterName_}`, insertText, "utf8")
 }
 
 /**

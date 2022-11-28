@@ -1,15 +1,11 @@
 import clc = require("cli-color")
 
+const { data } = require("58-toolkit")
+const { betLevelList, ratioToDenomArrayMap } = data
+
 import { convertDenomIdxToDenomStr } from "./helpers"
 
-import {
-  denomToRatioMap,
-  betLevelList,
-  denomToIndexMap,
-  denomIndexTitleList,
-  ratioToDenomArrayMap,
-  denomIdxToDenomStrArrayMap,
-} from "./data"
+import { denomToRatioMap, denomToIndexMap, denomIndexTitleList, denomIdxToDenomStrArrayMap } from "./data"
 
 export function calculate(
   cryDef,
