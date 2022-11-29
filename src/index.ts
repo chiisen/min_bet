@@ -5,6 +5,7 @@ const { file } = require("58-toolkit")
 const { emptyDir } = file
 
 import { initI8Denom } from "./i8Denom"
+import { initGameDenom } from "./gameDenom"
 import { mainLoop } from "./mainLoop"
 
 import { initMinBetMainLoop } from "./minBet"
@@ -43,6 +44,9 @@ const excelInputFileName = "./input/匯率表.xlsx"
 const excelMinBetInputFileName = "./input/minBet.xlsx"
 const excelGameMinBetInputFileName = "./input/gameMinBet.xlsx"
 const excelI8DenomInputFileName = "./input/i8_game_denom_setting.xlsx"
+const excelGameDenomInputFileName = "./input/game_currency_denom_setting.xlsx"
+
+initCurrencyList(excelInputFileName)
 
 initMinBetMainLoop(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName)
 
@@ -51,7 +55,7 @@ initMinBetMainLoop(currencyList, excelMinBetInputFileName, excelGameMinBetInputF
  */
 initI8Denom(excelI8DenomInputFileName)
 
-initCurrencyList(excelInputFileName)
+initGameDenom(excelGameDenomInputFileName)
 
 currencyDataList.forEach((row) => {
   console.log(`${row.currency}-${row.cryDef}-${row.desc}`)

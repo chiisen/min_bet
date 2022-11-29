@@ -9,6 +9,7 @@ import { denomTitleLIst, denomIndexTitleList } from "./data"
 import { processSQL } from "./sql"
 import { calculate, calculateBetLevelList } from "./calculate"
 import { findTable } from "./findTable"
+import { checkDenom } from "./checkDenom"
 
 /**
  * 主迴圈
@@ -58,7 +59,7 @@ export function mainLoop(targetCurrency: string, cryDef: number, isCalculate: bo
 
     calculateBetLevelList(minBet_, cryDef, checkDenomRatioByBetLevelListMap_)
 
-    console.log(`【minBet: ${minBet_}】================================================`)
+    //console.log(`【minBet: ${minBet_}】================================================`)
 
     //@note 儲存 EXCEL 格式的 denom
     const minBetDenomStrArray_ = []
@@ -95,4 +96,7 @@ export function mainLoop(targetCurrency: string, cryDef: number, isCalculate: bo
 
   //SQL
   processSQL(targetCurrency, denomIdxByMinBetListMap_, defaultDenomIdxByMinBetListMap_)
+
+  //檢查指定幣別的所有遊戲 denom 設定與 I8 的關係
+  checkDenom(targetCurrency)
 }

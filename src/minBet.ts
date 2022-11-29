@@ -1,7 +1,8 @@
 import clc = require("cli-color")
 
-const { excel } = require("58-toolkit")
+const { excel, convert } = require("58-toolkit")
 const { getExcel } = excel
+const { convertExcelToExcelDenomList, convertExcelToDenomList } = convert
 
 /**
  * key: minBet 與 currency 回傳 EXCEL 格式的 denom
@@ -22,6 +23,24 @@ export const minBetCurrencyToDefaultDenomNthMap = new Map()
  * 輸入 gameId 回傳 minBet
  */
 export const gameIdMinBetMap = new Map()
+
+/**
+ * 取得 gameId 的 default denom index
+ *
+ * @param gameId
+ * @param currency
+ * @returns
+ */
+export function getDefaultMinBetDenomIndex(gameId, currency) {
+  const minBet_ = gameIdMinBetMap.get(gameId)
+  const keyMinBetIdCurrency_ = `${minBet_}-${currency}`
+  const defaultDenomNth_ = minBetCurrencyToDefaultDenomNthMap.get(keyMinBetIdCurrency_)
+  const defaultDenomIndexNth_ = defaultDenomNth_ - 1
+  const excelDenomList_ = minBetToExcelDenomListMap.get(keyMinBetIdCurrency_)
+  const denomList_ = convertExcelToDenomList(excelDenomList_)
+  const defaultMinBetDenomIndex_ = denomList_[defaultDenomIndexNth_]
+  return defaultMinBetDenomIndex_
+}
 
 /**
  *
@@ -151,51 +170,4 @@ function initMinBet(minBetId, minBetSheet) {
       minBetToExcelDenomListMap.set(keyMinBetIdCurrency_, excelDenomList_)
     }
   })
-}
-
-/**
- * EXCEL 轉成 EXCEL 格式的 denom 陣列
- *
- * @param excelDenomArray 要EXCEL的資料才行
- * @returns
- */
-function convertExcelToExcelDenomList(excelDenomArray) {
-  if (!excelDenomArray) {
-    console.log(clc.red(`Null excelDenomArray`))
-    return null
-  }
-  const denomList_ = []
-  let denomIdx_ = 29
-  excelDenomArray.forEach((r) => {
-    if (r) {
-      denomList_.push(denomIdx_)
-    } else {
-      denomList_.push("")
-    }
-    denomIdx_--
-  })
-  return denomList_
-}
-
-/**
- * 陣列轉成 denom 字串
- * @param denomArray
- * @returns
- */
-function convertListToDenomString(denomArray) {
-  if (!denomArray) {
-    console.log(clc.red(`Null denomArray`))
-    return null
-  }
-  let denomIdxsString_ = ""
-  denomArray.forEach((r) => {
-    if (r) {
-      if (denomIdxsString_ === "") {
-        denomIdxsString_ += r.toString()
-      } else {
-        denomIdxsString_ += "," + r.toString()
-      }
-    }
-  })
-  return denomIdxsString_
 }
