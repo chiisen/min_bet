@@ -6,6 +6,7 @@ const { emptyDir } = file
 
 import { initI8Denom } from "./i8Denom"
 import { initGameDenom } from "./gameDenom"
+import { initFunkyDenom } from "./funkyDenom"
 import { mainLoop } from "./mainLoop"
 
 import { initMinBetMainLoop } from "./minBet"
@@ -45,6 +46,7 @@ const excelMinBetInputFileName = "./input/minBet.xlsx"
 const excelGameMinBetInputFileName = "./input/gameMinBet.xlsx"
 const excelI8DenomInputFileName = "./input/i8_game_denom_setting.xlsx"
 const excelGameDenomInputFileName = "./input/game_currency_denom_setting.xlsx"
+const excelFunkyDenomInputFileName = "./input/FUNKY_DENOM.xlsx"
 
 initCurrencyList(excelInputFileName)
 
@@ -56,6 +58,8 @@ initMinBetMainLoop(currencyList, excelMinBetInputFileName, excelGameMinBetInputF
 initI8Denom(excelI8DenomInputFileName)
 
 initGameDenom(excelGameDenomInputFileName)
+
+initFunkyDenom(excelFunkyDenomInputFileName)
 
 currencyDataList.forEach((row) => {
   console.log(`${row.currency}-${row.cryDef}-${row.desc}`)

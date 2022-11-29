@@ -1,18 +1,12 @@
 import clc = require("cli-color")
 
-const { data, file, convert } = require("58-toolkit")
+const { data, file } = require("58-toolkit")
 const { mergeSortArray, overRangeListString } = data
 const { writeAlter } = file
-const { convertExcelToDenomList } = convert
 
-import {
-  gameIdMinBetMap,
-  gameIdCurrencyToExcelDenomListMap,
-  minBetCurrencyToDefaultDenomNthMap,
-  minBetToExcelDenomListMap,
-  getDefaultMinBetDenomIndex,
-} from "./minBet"
+import { gameIdMinBetMap, gameIdCurrencyToExcelDenomListMap, getDefaultMinBetDenomIndex } from "./minBet"
 import { i8DenomMap } from "./i8Denom"
+import { funkyDenomMap } from "./funkyDenom"
 import { gameDenomMap } from "./gameDenom"
 
 /**
@@ -56,6 +50,8 @@ export function checkDenom(targetCurrency) {
             gameDenomString_ = clc.greenBright(`同【I8】設定`)
           }
         }
+
+        const funky_ = funkyDenomMap.get(keyGameIdCurrency_)
 
         console.log(
           `${clc.green(gameId_)} ${clc.redBright(targetCurrency)} ${clc.yellow(denomIdxArray_)} 不在【I8】${clc.yellow(
