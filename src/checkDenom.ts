@@ -1,8 +1,10 @@
 import clc = require("cli-color")
 
-const { data, file } = require("58-toolkit")
+const { data, file, convert, helper } = require("58-toolkit")
 const { mergeSortArray, overRangeListString } = data
 const { writeAlter } = file
+const { convertListToDenomString } = convert
+const { addTwoDenomList } = helper
 
 import { gameIdMinBetMap, gameIdCurrencyToExcelDenomListMap, getDefaultMinBetDenomIndex } from "./minBet"
 import { i8DenomMap } from "./i8Denom"
@@ -18,24 +20,14 @@ export function checkDenom(targetCurrency) {
   gameIdMinBetMap.forEach((v, gameId_) => {
     const keyGameIdCurrency_ = `${gameId_}-${targetCurrency}`
     const excelDenomList_ = gameIdCurrencyToExcelDenomListMap.get(keyGameIdCurrency_)
-    let denomIdxArray_ = ""
-
-    excelDenomList_.forEach((x) => {
-      if (x) {
-        if (denomIdxArray_ === "") {
-          denomIdxArray_ += x.toString()
-        } else {
-          denomIdxArray_ += "," + x.toString()
-        }
-      }
-    })
+    let denomListString_ = convertListToDenomString(excelDenomList_)
 
     const i8_ = i8DenomMap.get(keyGameIdCurrency_)
     //I8 必須要包含 denomIdxArray_
     if (i8_) {
       const i8ToString_ = `${i8_.denom}`
       const i8DenomList_ = i8ToString_.split(",")
-      const denomList_ = denomIdxArray_.split(",")
+      const denomList_ = denomListString_.split(",")
       if (!mergeSortArray(i8DenomList_, denomList_, `include`)) {
         let overRangeString_ = overRangeListString(denomList_, i8DenomList_)
 
@@ -51,7 +43,8 @@ export function checkDenom(targetCurrency) {
           }
         }
 
-        console.log(`${clc.green(gameId_)} ${clc.redBright(targetCurrency)} ${clc.yellow(denomIdxArray_)}`)
+        console.log(`===========================================`)
+        console.log(`${clc.green(gameId_)} ${clc.redBright(targetCurrency)} ${clc.yellow(denomListString_)}`)
         console.log(`不在【I8】${clc.yellow(i8ToString_)} 設定範圍內`)
         console.log(`超出【I8】設定為: ${clc.yellow(overRangeString_)}`)
         console.log(`遊戲 denom: ${clc.redBright(gameDenomString_)}`)
@@ -60,11 +53,13 @@ export function checkDenom(targetCurrency) {
         if (funky_) {
           console.log(`【FUNKY】${clc.green(funky_.denom)}`)
 
-          // @note FUNKY + 一般
-          const funkyToString_ = `${funky_.denom} + ${denomIdxArray_}`
-          console.log(`【FUNKY】 + 【一般】 ${clc.green(funkyToString_)}`)
-          
-
+          // @note FUNKY + 一般 + 1:1
+          const funkyToListString_ = `${funky_.denom}`
+          const funkyDenomList_ = funkyToListString_.split(",")
+          const twdDenomList_ = addTwoDenomList(funkyDenomList_, denomList_)
+          const twdDenomListAnd1By1_ = addTwoDenomList(twdDenomList_, [15])
+          const twoDenomListAnd1By1ListString_ = convertListToDenomString(twdDenomListAnd1By1_)
+          console.log(`【FUNKY】 + 【一般】+ 【1:1】 ${clc.green(twoDenomListAnd1By1ListString_)}`)
         } else {
           console.log(clc.yellowBright(`【FUNKY】沒有開放此幣別`))
         }
@@ -77,7 +72,7 @@ export function checkDenom(targetCurrency) {
       const defaultMinBetDenomIndex_ = getDefaultMinBetDenomIndex(gameId_, targetCurrency)
 
       noDataSql_ += `\n`
-      noDataSql_ += `INSERT INTO game_denom_setting (Cid,GameId,Currency,Denom,DefaultDenomId,PremadeBetGoldIdList,DefaultPremadeBetGoldId) VALUES ('d25e8rPFyBO4',${gameId_},'${targetCurrency}','${denomIdxArray_}',${defaultMinBetDenomIndex_},NULL,0);`
+      noDataSql_ += `INSERT INTO game_denom_setting (Cid,GameId,Currency,Denom,DefaultDenomId,PremadeBetGoldIdList,DefaultPremadeBetGoldId) VALUES ('d25e8rPFyBO4',${gameId_},'${targetCurrency}','${denomListString_}',${defaultMinBetDenomIndex_},NULL,0);`
     }
   })
 

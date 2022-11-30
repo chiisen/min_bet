@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@types/node-xlsx": "^0.15.3",
-    "58-toolkit": "^1.0.37",
+    "58-toolkit": "^1.0.38",
     "cli-color": "^2.0.3",
     "dotenv": "^16.0.3",
     "node-xlsx": "^0.21.0"

@@ -37,4 +37,18 @@ minBet_幣別.xlsx
 npm install --save D:\github\chiisen\58-toolkit.js
 ```
 
+# 移除本地安裝包的 58-toolkit 套件
+```bash=
+npm uninstall --save 58-toolkit
+```
+
+# 安裝 58-toolkit 套件
+```bash=
+npm install 58-toolkit
+```
+
+# 升級 58-toolkit 套件到最新版
+```bash=
+npm install 58-toolkit@latest
+```
 
