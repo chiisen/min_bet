@@ -51,18 +51,25 @@ export function checkDenom(targetCurrency) {
           }
         }
 
-        const funky_ = funkyDenomMap.get(keyGameIdCurrency_)
+        console.log(`${clc.green(gameId_)} ${clc.redBright(targetCurrency)} ${clc.yellow(denomIdxArray_)}`)
+        console.log(`不在【I8】${clc.yellow(i8ToString_)} 設定範圍內`)
+        console.log(`超出【I8】設定為: ${clc.yellow(overRangeString_)}`)
+        console.log(`遊戲 denom: ${clc.redBright(gameDenomString_)}`)
 
-        console.log(
-          `${clc.green(gameId_)} ${clc.redBright(targetCurrency)} ${clc.yellow(denomIdxArray_)} 不在【I8】${clc.yellow(
-            i8ToString_
-          )} 設定範圍內\n超出【I8】設定: ${clc.yellow(overRangeString_)}\n遊戲 denom: ${clc.redBright(
-            gameDenomString_
-          )}`
-        )
+        const funky_ = funkyDenomMap.get(keyGameIdCurrency_)
+        if (funky_) {
+          console.log(`【FUNKY】${clc.green(funky_.denom)}`)
+
+          // @note FUNKY + 一般
+          const funkyToString_ = `${funky_.denom} + ${denomIdxArray_}`
+          console.log(`【FUNKY】 + 【一般】 ${clc.green(funkyToString_)}`)
+          
+
+        } else {
+          console.log(clc.yellowBright(`【FUNKY】沒有開放此幣別`))
+        }
       }
     } else {
-      //@note 【I8】沒有資料
       console.log(
         `gameId: ${clc.green(gameId_)} currency: ${clc.redBright(targetCurrency)} 【I8】${clc.redBright("沒有資料")}`
       )
