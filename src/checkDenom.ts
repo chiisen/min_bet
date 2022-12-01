@@ -1,10 +1,10 @@
 import clc = require("cli-color")
 
-const { data, file, convert, helper } = require("58-toolkit")
+const { data, file, convert, helpers } = require("58-toolkit")
 const { mergeSortArray, overRangeListString } = data
 const { writeAlter } = file
 const { convertListToDenomString } = convert
-const { addTwoDenomList } = helper
+const { addTwoDenomList } = helpers
 
 import { gameIdMinBetMap, gameIdCurrencyToExcelDenomListMap, getDefaultMinBetDenomIndex } from "./minBet"
 import { i8DenomMap } from "./i8Denom"

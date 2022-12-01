@@ -7,6 +7,7 @@ const { emptyDir } = file
 import { initI8Denom } from "./i8Denom"
 import { initGameDenom } from "./gameDenom"
 import { initFunkyDenom } from "./funkyDenom"
+import { initTyBoiDenom } from "./tyBoiDenom"
 import { mainLoop } from "./mainLoop"
 
 import { initMinBetMainLoop } from "./minBet"
@@ -48,9 +49,19 @@ const excelI8DenomInputFileName = "./input/i8_game_denom_setting.xlsx"
 const excelGameDenomInputFileName = "./input/game_currency_denom_setting.xlsx"
 const excelFunkyDenomInputFileName = "./input/FUNKY_DENOM.xlsx"
 
+/**
+ * 特別檢查 USD 的 minBet 是否小於 0.05
+ */
+const excelTyBoiDenomInputFileName = "./input/PROD_TyBoi.xlsx"
+
 initCurrencyList(excelInputFileName)
 
 initMinBetMainLoop(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName)
+
+/**
+ * 特別檢查 USD 的 minBet 是否小於 0.05
+ */
+//initTyBoiDenom(excelTyBoiDenomInputFileName)
 
 /**
  * 載入 I8 的 Denom 設定
