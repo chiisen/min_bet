@@ -15,6 +15,10 @@ export function findTable(
   let defaultDenomIdx_ = ""
   const keyMinBetCurrency_ = `${minBet_}-${targetCurrency}`
   const excelDenomList_ = minBetToExcelDenomListMap.get(keyMinBetCurrency_)
+  if(!excelDenomList_){
+    console.error(`找不到 ${keyMinBetCurrency_} 的資料`)
+    return
+  }
   //判斷 denom 預設是否為 1:1
   if (default_denom_1by1) {
     const denom_1by1_index_ = 15 - 1 //索引為14(陣列由 0 開始)

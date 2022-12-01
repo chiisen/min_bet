@@ -37,7 +37,13 @@ export function getDefaultMinBetDenomIndex(gameId, currency) {
   const defaultDenomNth_ = minBetCurrencyToDefaultDenomNthMap.get(keyMinBetIdCurrency_)
   const defaultDenomIndexNth_ = defaultDenomNth_ - 1
   const excelDenomList_ = minBetToExcelDenomListMap.get(keyMinBetIdCurrency_)
+  if (!excelDenomList_) {
+    return null
+  }
   const denomList_ = convertExcelToDenomList(excelDenomList_)
+  if (!denomList_) {
+    return null
+  }
   const defaultMinBetDenomIndex_ = denomList_[defaultDenomIndexNth_]
   return defaultMinBetDenomIndex_
 }

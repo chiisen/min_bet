@@ -54,29 +54,40 @@ const excelFunkyDenomInputFileName = "./input/FUNKY_DENOM.xlsx"
  */
 const excelTyBoiDenomInputFileName = "./input/PROD_TyBoi.xlsx"
 
+/**
+ * 一般都是讀表來進行設定denom(此值為false)
+ * 因為設定內容沒有100%遵守公式
+ * 加入了很多的人為設定
+ *
+ * 除了要新增全新的幣別，改為true
+ * 可以幫你建立計算好的EXCEL與SQL腳本
+ */
+const isCalculate = true
+
 initCurrencyList(excelInputFileName)
 
-initMinBetMainLoop(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName)
+if (!isCalculate) {
+  initMinBetMainLoop(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName)
 
-/**
- * 特別檢查 USD 的 minBet 是否小於 0.05
- */
-//initTyBoiDenom(excelTyBoiDenomInputFileName)
+  /**
+   * 特別檢查 USD 的 minBet 是否小於 0.05
+   */
+  //initTyBoiDenom(excelTyBoiDenomInputFileName)
 
-/**
- * 載入 I8 的 Denom 設定
- */
-initI8Denom(excelI8DenomInputFileName)
+  /**
+   * 載入 I8 的 Denom 設定
+   */
+  initI8Denom(excelI8DenomInputFileName)
 
-initGameDenom(excelGameDenomInputFileName)
+  initGameDenom(excelGameDenomInputFileName)
 
-initFunkyDenom(excelFunkyDenomInputFileName)
+  initFunkyDenom(excelFunkyDenomInputFileName)
+}
 
 currencyDataList.forEach((row) => {
   console.log(`${row.currency}-${row.cryDef}-${row.desc}`)
 
   if (row.cryDef != "匯率") {
-    const isCalculate = false //一般都是讀表(此值為false)，因為表格有很多人為填寫的例外操作
     mainLoop(row.currency, row.cryDef, isCalculate)
   }
 })
