@@ -8,6 +8,20 @@
   - PHP 1:1 指的是只有 PHP 幣別，而且 denom 只有 1:1，預設也是1:1
   - IDR、VND 1000:1 指的是只有 IDR、VND 幣別，而且 denom 只有 1000:1 
 
+# .env
+- denom預設是否1:1
+DEFAULT_DENOM_1BY1=true
+
+- 讀表或自己算
+IS_CALCULATE
+
+一般都是讀表來進行設定denom(此值為false)
+因為設定內容沒有100%遵守公式
+加入了很多的人為設定
+
+除了要新增全新的幣別，改為true
+可以幫你建立計算好的EXCEL與SQL腳本
+
 
 # 安裝
 ```bash=

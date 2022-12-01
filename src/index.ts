@@ -24,7 +24,6 @@ dotenv.config()
 console.log("ENV: " + process.env["ENV"]) //ENV
 
 export const default_denom_1by1 = /true/i.test(process.env["DEFAULT_DENOM_1BY1"])
-console.log("DEFAULT_DENOM_1BY1: " + process.env["DEFAULT_DENOM_1BY1"]) //DEFAULT_DENOM_1BY1
 console.log("DEFAULT_DENOM_1BY1: " + default_denom_1by1) //DEFAULT_DENOM_1BY1
 
 /**
@@ -62,7 +61,8 @@ const excelTyBoiDenomInputFileName = "./input/PROD_TyBoi.xlsx"
  * 除了要新增全新的幣別，改為true
  * 可以幫你建立計算好的EXCEL與SQL腳本
  */
-const isCalculate = true
+export const isCalculate = /true/i.test(process.env["IS_CALCULATE"])
+console.log("IS_CALCULATE: " + isCalculate) //IS_CALCULATE
 
 initCurrencyList(excelInputFileName)
 
