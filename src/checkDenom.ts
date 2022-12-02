@@ -43,7 +43,7 @@ export function checkDenom(targetCurrency) {
           }
         }
 
-        let overRangeStringColor_ = mergeSortArrayByColor(i8DenomList_, denomList_)
+        let overRangeStringColor_ = mergeSortArrayByColor(i8DenomList_, denomList_, clc.green, clc.redBright)
 
         console.log(`===========================================`)
         console.log(`${clc.green(gameId_)} ${clc.redBright(targetCurrency)} ${clc.yellow(denomListString_)}`)
