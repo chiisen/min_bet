@@ -4,7 +4,7 @@ const { data, file, convert, helpers } = require("58-toolkit")
 const { mergeSortArray, overRangeListString } = data
 const { writeAlter } = file
 const { convertListToDenomString } = convert
-const { addTwoDenomList } = helpers
+const { addTwoDenomList, mergeSortArrayByColor } = helpers
 
 import { gameIdMinBetMap, gameIdCurrencyToExcelDenomListMap, getDefaultMinBetDenomIndex } from "./minBet"
 import { i8DenomMap } from "./i8Denom"
@@ -43,10 +43,12 @@ export function checkDenom(targetCurrency) {
           }
         }
 
+        let overRangeStringColor_ = mergeSortArrayByColor(i8DenomList_, denomList_)
+
         console.log(`===========================================`)
         console.log(`${clc.green(gameId_)} ${clc.redBright(targetCurrency)} ${clc.yellow(denomListString_)}`)
         console.log(`不在【I8】${clc.yellow(i8ToString_)} 設定範圍內`)
-        console.log(`超出【I8】設定為: ${clc.yellow(overRangeString_)}`)
+        console.log(`超出【I8】設定為: ${clc.yellow(overRangeStringColor_)}`)
         console.log(`遊戲 denom: ${clc.redBright(gameDenomString_)}`)
 
         const funky_ = funkyDenomMap.get(keyGameIdCurrency_)
