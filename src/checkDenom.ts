@@ -26,30 +26,34 @@ export function checkDenom(targetCurrency) {
     //I8 必須要包含 denomIdxArray_
     if (i8_) {
       const i8ToString_ = `${i8_.denom}`
-      const i8DenomList_ = i8ToString_.split(",")
+      let i8DenomList_ = i8ToString_.split(",")
+      i8DenomList_ = i8DenomList_.sort(function (a: string, b: string) {
+        return Number(b) - Number(a)
+      }) //排序: 大到小
       const denomList_ = denomListString_.split(",")
       if (!mergeSortArray(i8DenomList_, denomList_, `include`)) {
         let overRangeString_ = overRangeListString(denomList_, i8DenomList_)
 
         //@note 不在【I8】設定範圍內
         const gameDenom_ = gameDenomMap.get(keyGameIdCurrency_)
-        let gameDenomString_ = clc.redBright("找不到遊戲 denom 設定")
+        let gameDenomStringColor_ = clc.redBright("找不到遊戲 denom 設定")
         if (gameDenom_) {
           const gameDenomArray_ = gameDenom_.denom.toString().split(",")
           if (!mergeSortArray(i8DenomList_, gameDenomArray_, `same`)) {
-            gameDenomString_ = clc.redBright(gameDenom_.denom)
+            gameDenomStringColor_ = mergeSortArrayByColor(gameDenomArray_, i8DenomList_, clc.green, clc.redBright)
           } else {
-            gameDenomString_ = clc.greenBright(`同【I8】設定`)
+            gameDenomStringColor_ = clc.greenBright(`同【I8】設定`)
           }
         }
 
-        let overRangeStringColor_ = mergeSortArrayByColor(i8DenomList_, denomList_, clc.green, clc.redBright)
+        const overRangeStringColor_ = mergeSortArrayByColor(i8DenomList_, denomList_, clc.green, clc.redBright)
 
         console.log(`===========================================`)
-        console.log(`${clc.green(gameId_)} ${clc.redBright(targetCurrency)} ${clc.yellow(denomListString_)}`)
-        console.log(`不在【I8】${clc.yellow(i8ToString_)} 設定範圍內`)
-        console.log(`超出【I8】設定為: ${clc.yellow(overRangeStringColor_)}`)
-        console.log(`遊戲 denom: ${clc.redBright(gameDenomString_)}`)
+        console.log(`${clc.green(gameId_)} ${clc.yellow(targetCurrency)} ${clc.green(denomListString_)}`)
+        console.log(`不在【I8】${clc.green(i8ToString_)} 設定範圍內`)
+        console.log(`超出【I8】設定為(${overRangeString_}): ${overRangeStringColor_}`)
+        console.log(`遊戲 denom: ${gameDenom_.denom}`)
+        console.log(`遊戲 denom(超出【I8】紅色): ${gameDenomStringColor_}`)
 
         const funky_ = funkyDenomMap.get(keyGameIdCurrency_)
         if (funky_) {

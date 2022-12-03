@@ -1,11 +1,15 @@
 import clc = require("cli-color")
 
 const { data } = require("58-toolkit")
-const { betLevelList, ratioToDenomArrayMap } = data
-
-import { convertDenomIdxToDenomStr } from "./helpers"
-
-import { denomToRatioMap, denomToIndexMap, denomIndexTitleList, denomIdxToDenomStrArrayMap } from "./data"
+const {
+  betLevelList,
+  ratioToDenomArrayMap,
+  denomStringToDenomIndexMap,
+  denomIndexTitleList,
+  denomIndexToDenomStringArrayMap,
+  denomToRatioMap,
+  denomIndexToDenomString,
+} = data
 
 export function calculate(
   cryDef,
@@ -32,7 +36,10 @@ export function calculate(
         return
       }
       const denomStr = denom[0] //面額字串
-      denomIdxArray_ += denomIdxArray_ === "" ? denomToIndexMap.get(denomStr) : "," + denomToIndexMap.get(denomStr)
+      denomIdxArray_ +=
+        denomIdxArray_ === ""
+          ? denomStringToDenomIndexMap.get(denomStr)
+          : "," + denomStringToDenomIndexMap.get(denomStr)
 
       const existMaxDenomCount = maxRangeMinBetDenom_.get(denomStr)
       let maxDenomCount = 1
@@ -45,7 +52,7 @@ export function calculate(
 
   denomIndexTitleList.map((denomIdx_: string) => {
     //denomIdx 轉 denomRatio
-    const denomString_ = convertDenomIdxToDenomStr(denomIdx_)
+    const denomString_ = denomIndexToDenomString(denomIdx_)
     const convertDenomRatio_ = denomToRatioMap.get(denomString_)
     if (!convertDenomRatio_) {
       console.error(`convertDenomRatio_ is null(denomString_: ${denomString_})`)
@@ -73,7 +80,7 @@ export function calculate(
     defaultDenomIdx_ = array_[0]
   }
 
-  const defaultDenomString_ = convertDenomIdxToDenomStr(defaultDenomIdx_)
+  const defaultDenomString_ = denomIndexToDenomString(defaultDenomIdx_)
 
   console.log(
     clc.magenta(`cryDef=${cryDef} minBet_=${minBet_} `) +
@@ -124,7 +131,7 @@ export function calculate(
 
 function calculateMaxDenomIdxArray(maxRangeMinBetDenomList, maxRangeMinBetDenom_, maxDenomIdxArray_) {
   denomIndexTitleList.map((denomIdx_: string) => {
-    const denom_ = denomIdxToDenomStrArrayMap.get(denomIdx_)
+    const denom_ = denomIndexToDenomStringArrayMap.get(denomIdx_)
     if (!denom_) {
       console.error(`denom_ is null(denomIdx_: ${denomIdx_})`)
       return
@@ -135,7 +142,9 @@ function calculateMaxDenomIdxArray(maxRangeMinBetDenomList, maxRangeMinBetDenom_
       maxRangeMinBetDenomList.push(denomString_)
 
       maxDenomIdxArray_ +=
-        maxDenomIdxArray_ === "" ? denomToIndexMap.get(denomString_) : "," + denomToIndexMap.get(denomString_)
+        maxDenomIdxArray_ === ""
+          ? denomStringToDenomIndexMap.get(denomString_)
+          : "," + denomStringToDenomIndexMap.get(denomString_)
     } else {
       maxRangeMinBetDenomList.push("")
     }
@@ -159,7 +168,8 @@ export function calculateBetLevelList(minBet_, cryDef, checkDenomRatioByBetLevel
      */
     let result_ = 0
     denomRatioList.map((denomRatio_) => {
-      result_ = (minBet_ * betLevel_ * denomRatio_) / cryDef
+      const ratio_ = Number(denomRatio_)
+      result_ = (minBet_ * betLevel_ * ratio_) / cryDef
 
       //安全範圍 0.6 到 200
       if (result_ > 0.6 && result_ < 200) {

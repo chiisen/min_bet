@@ -1,10 +1,8 @@
 import clc = require("cli-color")
 
 const { data, excel } = require("58-toolkit")
-const { minBetList } = data
+const { minBetList, denomTitleLIst, denomIndexTitleList } = data
 const { writeSinglePageExcel } = excel
-
-import { denomTitleLIst, denomIndexTitleList } from "./data"
 
 import { processSQL } from "./sql"
 import { calculate, calculateBetLevelList } from "./calculate"

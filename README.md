@@ -1,5 +1,5 @@
 # min_bet
-依據每個遊戲 minBet 填入正確的 denom
+依據每個遊戲 minBet 填入正確的 denom  
 ![SQL語法](https://i.imgur.com/0lkyZWD.png)
 - 有下面幾種狀態:
   - 正常(依據 minBet denom 的設定檔案)
