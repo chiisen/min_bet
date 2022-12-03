@@ -1,6 +1,8 @@
-import { convertDenomIdxToDenomStr } from "./helpers"
 import { minBetToExcelDenomListMap, minBetCurrencyToDefaultDenomNthMap } from "./minBet"
 import { default_denom_1by1 } from "./index"
+
+const { data } = require("58-toolkit")
+const { denomIndexToDenomString } = data
 
 export function findTable(
   minBet_,
@@ -15,7 +17,7 @@ export function findTable(
   let defaultDenomIdx_ = ""
   const keyMinBetCurrency_ = `${minBet_}-${targetCurrency}`
   const excelDenomList_ = minBetToExcelDenomListMap.get(keyMinBetCurrency_)
-  if(!excelDenomList_){
+  if (!excelDenomList_) {
     console.error(`找不到 ${keyMinBetCurrency_} 的資料`)
     return
   }
@@ -31,7 +33,7 @@ export function findTable(
   const denomList_ = []
   excelDenomList_.forEach((x) => {
     if (x) {
-      const denomString_ = convertDenomIdxToDenomStr(x)
+      const denomString_ = denomIndexToDenomString(x)
       excelDenomStringList_.push(denomString_)
 
       if (denomIdxArray_ === "") {
@@ -59,7 +61,7 @@ export function findTable(
     defaultDenomIdx_ = denomList_[defaultDenomNthIndex_]
   }
 
-  const defaultDenomString_ = convertDenomIdxToDenomStr(defaultDenomIdx_)
+  const defaultDenomString_ = denomIndexToDenomString(defaultDenomIdx_)
 
   excelMinBetOutput_.push([
     cryDef,
