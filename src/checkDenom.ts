@@ -40,9 +40,9 @@ export function checkDenom(targetCurrency) {
         if (gameDenom_) {
           const gameDenomArray_ = gameDenom_.denom.toString().split(",")
           if (!mergeSortArray(i8DenomList_, gameDenomArray_, `same`)) {
-            gameDenomStringColor_ = mergeSortArrayByColor(gameDenomArray_, i8DenomList_, clc.green, clc.redBright)
+            gameDenomStringColor_ = mergeSortArrayByColor(i8DenomList_, gameDenomArray_, clc.green, clc.redBright)
           } else {
-            gameDenomStringColor_ = clc.greenBright(`同【I8】設定`)
+            gameDenomStringColor_ = clc.green(`同【I8】設定`)
           }
         }
 
