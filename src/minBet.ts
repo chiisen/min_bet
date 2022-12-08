@@ -57,7 +57,7 @@ export function getDefaultMinBetDenomIndex(gameId, currency) {
 export function initMinBetMainLoop(currencyList, excelMinBetInputFileName, excelGameMinBetInputFileName) {
   initAllMinBets(excelMinBetInputFileName)
 
-  const gameMinBet_ = getExcel(excelGameMinBetInputFileName, false, "MIN_BET")
+  const gameMinBet_ = getExcel(excelGameMinBetInputFileName, false, "gameMinBet")
 
   gameMinBet_.forEach((row) => {
     const gameId_ = row[0]

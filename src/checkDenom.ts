@@ -37,7 +37,9 @@ export function checkDenom(targetCurrency) {
         //@note 不在【I8】設定範圍內
         const gameDenom_ = gameDenomMap.get(keyGameIdCurrency_)
         let gameDenomStringColor_ = clc.redBright("找不到遊戲 denom 設定")
+        let gameSourceDenom_ = `${keyGameIdCurrency_} 找不到 denom`
         if (gameDenom_) {
+          gameSourceDenom_ = gameDenom_.denom
           const gameDenomArray_ = gameDenom_.denom.toString().split(",")
           if (!mergeSortArray(i8DenomList_, gameDenomArray_, `same`)) {
             gameDenomStringColor_ = mergeSortArrayByColor(i8DenomList_, gameDenomArray_, clc.green, clc.redBright)
@@ -52,7 +54,7 @@ export function checkDenom(targetCurrency) {
         console.log(`${clc.green(gameId_)} ${clc.yellow(targetCurrency)} ${clc.green(denomListString_)}`)
         console.log(`不在【I8】${clc.green(i8ToString_)} 設定範圍內`)
         console.log(`超出【I8】設定為(${overRangeString_}): ${overRangeStringColor_}`)
-        console.log(`遊戲 denom: ${gameDenom_.denom}`)
+        console.log(`遊戲 denom: ${gameSourceDenom_}`)
         console.log(`遊戲 denom(超出【I8】紅色): ${gameDenomStringColor_}`)
 
         const funky_ = funkyDenomMap.get(keyGameIdCurrency_)
