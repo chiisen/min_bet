@@ -1,7 +1,12 @@
 const { file } = require("58-toolkit")
 const { writeAlter } = file
 
-export function processSQL(targetCurrency: string, denomIdxByMinBetListMap_, defaultDenomIdxByMinBetListMap_) {
+export function processSQL(
+  targetCurrency: string,
+  denomIdxByMinBetListMap_,
+  defaultDenomIdxByMinBetListMap_,
+  dc: string
+) {
   const sql_ = `
 SET @targetCid = "換上指定Hall的CidS";
 SET @currency = "${targetCurrency}";
@@ -75,7 +80,11 @@ WHERE cid = @targetCid
 ) t
 on duplicate key update Denom = t.pb, DefaultDenomId = t.dp;`
 
-  writeAlter("./output/", sql_, `alter_${targetCurrency}.sql`)
+  if (dc != null) {
+    writeAlter(`./output/${dc}/`, sql_, `alter_${targetCurrency}.sql`)
+  } else {
+    writeAlter("./output/", sql_, `alter_${targetCurrency}.sql`)
+  }
 
   //console.log(sql_)
 }

@@ -8,10 +8,12 @@ import { initI8Denom } from "./i8Denom"
 import { initGameDenom } from "./gameDenom"
 import { initFunkyDenom } from "./funkyDenom"
 import { initTyBoiDenom } from "./tyBoiDenom"
-import { mainLoop } from "./mainLoop"
+import { mainLoop, mainLoopAllDC } from "./mainLoop"
 
 import { initMinBetMainLoop } from "./minBet"
 import { initCurrencyList, currencyList, currencyDataList } from "./currencyList"
+import { initAllDCCurrencies, allDCCurrenciesMap } from "./AllDCCurrencies"
+import { initHallName } from "./hallName"
 
 const envFile = ".env"
 if (!fs.existsSync(".env")) {
@@ -47,6 +49,8 @@ const excelGameMinBetInputFileName = "./input/gameMinBet.xlsx"
 const excelI8DenomInputFileName = "./input/i8_game_denom_setting.xlsx"
 const excelGameDenomInputFileName = "./input/game_currency_denom_setting.xlsx"
 const excelFunkyDenomInputFileName = "./input/FUNKY_DENOM.xlsx"
+const excelAllDCCurrenciesInputFileName = "./input/AllDCCurrencies.xlsx"
+const excelHallNameInputFileName = "./input/HALL_NAME.xlsx"
 
 /**
  * 特別檢查 USD 的 minBet 是否小於 0.05
@@ -63,6 +67,12 @@ const excelTyBoiDenomInputFileName = "./input/PROD_TyBoi.xlsx"
  */
 export const isCalculate = /true/i.test(process.env["IS_CALCULATE"])
 console.log("IS_CALCULATE: " + isCalculate) //IS_CALCULATE
+
+/**
+ * 是否匯出所有HALL的幣別設定
+ */
+export const isAllDCCurrencies = /true/i.test(process.env["IS_ALL_DC_CURRENCIES"])
+console.log("IS_ALL_DC_CURRENCIES: " + isAllDCCurrencies) //IS_ALL_DC_CURRENCIES
 
 initCurrencyList(excelInputFileName)
 
@@ -84,10 +94,37 @@ if (!isCalculate) {
   initFunkyDenom(excelFunkyDenomInputFileName)
 }
 
-currencyDataList.forEach((row) => {
-  console.log(`${row.currency}-${row.cryDef}-${row.desc}`)
+if (isAllDCCurrencies) {
+  initHallName(excelHallNameInputFileName)
 
-  if (row.cryDef != "匯率") {
-    mainLoop(row.currency, row.cryDef, isCalculate)
-  }
-})
+  initAllDCCurrencies(excelAllDCCurrenciesInputFileName)
+
+  allDCCurrenciesMap.forEach((row) => {
+    console.log(`DC: ${clc.red(row.dc)} - Cid: ${clc.green(row.hallId)} - Currencies: ${clc.yellow(row.currencies)}`)
+    const currenciesArray_ = row.currencies.split(",")
+    currenciesArray_.forEach((x) => {
+      const findCurrency_ = currencyDataList.find(function (item, index, array) {
+        return item.currency === x
+      })
+
+      if (findCurrency_.cryDef != "匯率") {
+        let path_ = ""
+        if (row.patch) {
+          row.patch.forEach((x) => {
+            path_ += `${x}/`
+          })
+
+          mainLoopAllDC(findCurrency_.currency, findCurrency_.cryDef, path_)
+        }
+      }
+    })
+  })
+} else {
+  currencyDataList.forEach((row) => {
+    console.log(`${row.currency}-${row.cryDef}-${row.desc}`)
+
+    if (row.cryDef != "匯率") {
+      mainLoop(row.currency, row.cryDef, isCalculate)
+    }
+  })
+}
