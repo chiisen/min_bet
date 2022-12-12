@@ -14,6 +14,7 @@ import { initMinBetMainLoop } from "./minBet"
 import { initCurrencyList, currencyList, currencyDataList } from "./currencyList"
 import { initAllDCCurrencies, allDCCurrenciesMap } from "./AllDCCurrencies"
 import { initHallName } from "./hallName"
+import { initHallSetting } from "./hallSetting"
 
 const envFile = ".env"
 if (!fs.existsSync(".env")) {
@@ -51,6 +52,7 @@ const excelGameDenomInputFileName = "./input/game_currency_denom_setting.xlsx"
 const excelFunkyDenomInputFileName = "./input/FUNKY_DENOM.xlsx"
 const excelAllDCCurrenciesInputFileName = "./input/AllDCCurrencies.xlsx"
 const excelHallNameInputFileName = "./input/HALL_NAME.xlsx"
+const excelHallSettingInputFileName = "./input/denom特化統整表.xlsx"
 
 /**
  * 特別檢查 USD 的 minBet 是否小於 0.05
@@ -95,6 +97,8 @@ if (!isCalculate) {
 }
 
 if (isAllDCCurrencies) {
+  initHallSetting(excelHallSettingInputFileName)
+
   initHallName(excelHallNameInputFileName)
 
   initAllDCCurrencies(excelAllDCCurrenciesInputFileName)
@@ -107,15 +111,15 @@ if (isAllDCCurrencies) {
         return item.currency === x
       })
 
-      if (findCurrency_.cryDef != "匯率") {
-        let path_ = ""
-        if (row.patch) {
-          row.patch.forEach((x) => {
-            path_ += `${x}/`
-          })
+      let path_ = ""
+      if (row.patch) {
+        row.patch.forEach((x) => {
+          path_ += `${x}/`
+        })
 
-          mainLoopAllDC(findCurrency_.currency, findCurrency_.cryDef, path_)
-        }
+        path_ += `${row.dc}/`
+
+        mainLoopAllDC(findCurrency_.currency, findCurrency_.cryDef, path_)
       }
     })
   })

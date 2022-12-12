@@ -12,7 +12,7 @@ import { checkDenom } from "./checkDenom"
 /**
  *
  */
-export function mainLoopAllDC(targetCurrency: string, cryDef: number, dc: string) {
+export function mainLoopAllDC(targetCurrency: string, cryDef: number, path: string) {
   /**
    * Excel 的輸出資料陣列
    */
@@ -73,13 +73,13 @@ export function mainLoopAllDC(targetCurrency: string, cryDef: number, dc: string
     )
   })
 
-  writeSinglePageExcel(`./output/${dc}/minBet_${targetCurrency}.xlsx`, "minBetSheet", excelMinBetOutput_)
+  writeSinglePageExcel(`./output/${path}/minBet_${targetCurrency}.xlsx`, "minBetSheet", excelMinBetOutput_)
 
   //SQL
-  processSQL(targetCurrency, denomIdxByMinBetListMap_, defaultDenomIdxByMinBetListMap_, dc)
+  processSQL(targetCurrency, denomIdxByMinBetListMap_, defaultDenomIdxByMinBetListMap_, path)
 
   //檢查指定幣別的所有遊戲 denom 設定與 I8 的關係
-  checkDenom(targetCurrency)
+  //checkDenom(targetCurrency)
 }
 
 /**

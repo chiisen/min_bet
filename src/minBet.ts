@@ -164,7 +164,15 @@ function initMinBet(minBetId, minBetSheet) {
       if (defaultDenomNth_ === 0) {
         minBetCurrencyToDefaultDenomNthMap.set(keyDefaultMinBetCurrency_, 1)
       } else {
-        minBetCurrencyToDefaultDenomNthMap.set(keyDefaultMinBetCurrency_, defaultDenomNth_)
+        if (currency === "PHP") {
+          /**
+           * 目前 PHP 只有 1:1
+           */
+          const excelDenomListPHP_ = excelDenomListPHP()
+          minBetCurrencyToDefaultDenomNthMap.set(keyDefaultMinBetCurrency_, 1)
+        } else {
+          minBetCurrencyToDefaultDenomNthMap.set(keyDefaultMinBetCurrency_, defaultDenomNth_)
+        }
       }
 
       const excelDenomList_ = convertExcelToExcelDenomList(excelDenomArray_)
@@ -173,7 +181,57 @@ function initMinBet(minBetId, minBetSheet) {
       if (minBetToExcelDenomListMap.get(keyMinBetIdCurrency_)) {
         console.log(`key_: ${keyMinBetIdCurrency_}-重複了`)
       }
-      minBetToExcelDenomListMap.set(keyMinBetIdCurrency_, excelDenomList_)
+
+      if (currency === "PHP") {
+        /**
+         * 目前 PHP 只有 1:1
+         */
+        const excelDenomListPHP_ = excelDenomListPHP()
+        minBetToExcelDenomListMap.set(keyMinBetIdCurrency_, excelDenomListPHP_)
+      } else {
+        minBetToExcelDenomListMap.set(keyMinBetIdCurrency_, excelDenomList_)
+      }
     }
   })
+}
+
+/**
+ * 回傳 PHP 只有 1:1
+ *
+ * @returns PHP 只有 1:1
+ */
+function excelDenomListPHP() {
+  const excelDenomArrayPHP_ = [
+    undefined, //29 1:100000
+    undefined, //28 1:50000
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    "1:1",
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined, //2 50000:1
+    undefined, //1 100000:1
+  ]
+  const excelDenomListPHP_ = convertExcelToExcelDenomList(excelDenomArrayPHP_)
+  return excelDenomListPHP_
 }

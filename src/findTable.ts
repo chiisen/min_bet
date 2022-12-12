@@ -58,6 +58,11 @@ export function findTable(
   } else {
     const defaultDenomNthIndex_ = defaultDenomNth_ - 1
 
+    if (defaultDenomNthIndex_ >= denomList_.length) {
+      console.error(
+        `keyDefaultMinBetCurrency_: ${keyDefaultMinBetCurrency_} 超出陣列範圍 defaultDenomNthIndex_: ${defaultDenomNthIndex_}`
+      )
+    }
     defaultDenomIdx_ = denomList_[defaultDenomNthIndex_]
   }
 

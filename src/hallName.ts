@@ -1,3 +1,5 @@
+import clc = require("cli-color")
+
 const { excel } = require("58-toolkit")
 const { getExcel } = excel
 
@@ -43,7 +45,7 @@ export function initHallName(excelHallNameInputFileName) {
       while (upHall_ && upHall_.upId != "-1") {
         list_.push(`${upHall_.dc}`)
         levelPath_ += ` ${upHall_.dc} `
-        console.log(levelIcon_ + `來源-DC: ${targetDC_} 的階層-DC: ${levelPath_}`)
+        //console.log(levelIcon_ + `來源-DC: ${clc.yellow(targetDC_)} 的階層-DC: ${clc.yellow(levelPath_)}`)
 
         upHall_ = hallNameMap.get(upHall_.upId)
 
@@ -52,7 +54,7 @@ export function initHallName(excelHallNameInputFileName) {
       const reverseList_ = list_.reverse()
       x.pathList = reverseList_
     } else {
-      console.error(`來源-DC: ${targetDC_} 一開始 upId 就是 "-1" (可能是 I8 的那個最上層)`)
+      console.error(`來源-DC: ${clc.yellow(targetDC_)} 一開始 upId 就是 "-1" (可能是 I8 的那個最上層)`)
     }
   }) // hallNameMap end
 }
