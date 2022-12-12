@@ -16,7 +16,7 @@ export function initHallSetting(excelHallSettingInputFileName) {
     const kbb_1By1_ = row[9]
     const twd_1By1_ = row[10]
 
-    if (dc_ != "DC" && dc_ != "NULL") {
+    if (dc_ != "DC" && dc_ != "NULL" && dc_ != undefined) {
       // @note 有找不到 Cid，結果DC為NULL的狀況，先略過
       const keyDC_ = `${dc_}`
       const hallSettingData_ = hallSettingMap.get(keyDC_)

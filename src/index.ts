@@ -119,7 +119,7 @@ if (isAllDCCurrencies) {
       path_ += `${row.dc}/`
     }
     else{
-      console.error(`路徑不存在 dc: ${row.dc}`)
+      console.error(`路徑不存在 dc: ${clc.yellow(row.dc)}`)
     }
     currenciesArray_.forEach((x) => {
       const findCurrency_ = currencyDataList.find(function (item, index, array) {
