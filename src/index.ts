@@ -103,6 +103,7 @@ if (isAllDCCurrencies) {
 
   initAllDCCurrencies(excelAllDCCurrenciesInputFileName)
 
+  let totalAllSql_ = ""
   allDCCurrenciesMap.forEach((row) => {
     console.log(`DC: ${clc.red(row.dc)} - Cid: ${clc.green(row.hallId)} - Currencies: ${clc.yellow(row.currencies)}`)
     const currenciesArray_ = row.currencies.split(",")
@@ -128,7 +129,11 @@ if (isAllDCCurrencies) {
       allSql_ = mainLoopAllDC(findCurrency_.currency, findCurrency_.cryDef, path_, allSql_, row.hallId)
     })
     writeAlter(`./output/${path_}`, allSql_, `all_${row.dc}_alter.sql`)
+
+    totalAllSql_ += allSql_
   })
+
+  writeAlter(`./output/`, totalAllSql_, `total_all_alter.sql`)
 } else {
   currencyDataList.forEach((row) => {
     console.log(`${row.currency}-${row.cryDef}-${row.desc}`)
