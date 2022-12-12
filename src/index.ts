@@ -2,7 +2,7 @@ import clc = require("cli-color")
 import fs = require("fs")
 import dotenv = require("dotenv")
 const { file } = require("58-toolkit")
-const { emptyDir } = file
+const { emptyDir, writeAlter } = file
 
 import { initI8Denom } from "./i8Denom"
 import { initGameDenom } from "./gameDenom"
@@ -106,22 +106,28 @@ if (isAllDCCurrencies) {
   allDCCurrenciesMap.forEach((row) => {
     console.log(`DC: ${clc.red(row.dc)} - Cid: ${clc.green(row.hallId)} - Currencies: ${clc.yellow(row.currencies)}`)
     const currenciesArray_ = row.currencies.split(",")
+
+    let allSql_ = ""
+
+    let path_ = ""
+    if (row.patch) {
+      row.patch.forEach((x) => {
+        path_ += `${x}/`
+      })
+
+      path_ += `${row.dc}/`
+    }
+    else{
+      console.error(`路徑不存在 dc: ${row.dc}`)
+    }
     currenciesArray_.forEach((x) => {
       const findCurrency_ = currencyDataList.find(function (item, index, array) {
         return item.currency === x
       })
 
-      let path_ = ""
-      if (row.patch) {
-        row.patch.forEach((x) => {
-          path_ += `${x}/`
-        })
-
-        path_ += `${row.dc}/`
-
-        mainLoopAllDC(findCurrency_.currency, findCurrency_.cryDef, path_)
-      }
+      allSql_ = mainLoopAllDC(findCurrency_.currency, findCurrency_.cryDef, path_, allSql_, row.hallId)
     })
+    writeAlter(`./output/${path_}`, allSql_, `all_${row.dc}_alter.sql`)
   })
 } else {
   currencyDataList.forEach((row) => {

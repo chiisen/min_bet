@@ -12,7 +12,7 @@ import { checkDenom } from "./checkDenom"
 /**
  *
  */
-export function mainLoopAllDC(targetCurrency: string, cryDef: number, path: string) {
+export function mainLoopAllDC(targetCurrency: string, cryDef: number, path: string, allSql: string, hallId: string) {
   /**
    * Excel 的輸出資料陣列
    */
@@ -29,15 +29,6 @@ export function mainLoopAllDC(targetCurrency: string, cryDef: number, path: stri
     "count",
   ])
   excelMinBetOutput_.push(["", "", ...denomIndexTitleList, ""])
-
-  /**
-   * Min Bet 中的面額最大範圍區間
-   *
-   * key: 面額
-   *
-   * value: 累計次數
-   */
-  const maxRangeMinBetDenom_ = new Map()
 
   const denomIdxByMinBetListMap_ = new Map()
   const defaultDenomIdxByMinBetListMap_ = new Map()
@@ -76,10 +67,12 @@ export function mainLoopAllDC(targetCurrency: string, cryDef: number, path: stri
   writeSinglePageExcel(`./output/${path}/minBet_${targetCurrency}.xlsx`, "minBetSheet", excelMinBetOutput_)
 
   //SQL
-  processSQL(targetCurrency, denomIdxByMinBetListMap_, defaultDenomIdxByMinBetListMap_, path)
+  allSql = processSQL(targetCurrency, denomIdxByMinBetListMap_, defaultDenomIdxByMinBetListMap_, path, allSql, hallId)
 
   //檢查指定幣別的所有遊戲 denom 設定與 I8 的關係
   //checkDenom(targetCurrency)
+
+  return allSql
 }
 
 /**
@@ -166,7 +159,7 @@ export function mainLoop(targetCurrency: string, cryDef: number, isCalculate: bo
   writeSinglePageExcel(`./output/minBet_${targetCurrency}.xlsx`, "minBetSheet", excelMinBetOutput_)
 
   //SQL
-  processSQL(targetCurrency, denomIdxByMinBetListMap_, defaultDenomIdxByMinBetListMap_, null)
+  processSQL(targetCurrency, denomIdxByMinBetListMap_, defaultDenomIdxByMinBetListMap_, null, null, null)
 
   //檢查指定幣別的所有遊戲 denom 設定與 I8 的關係
   checkDenom(targetCurrency)

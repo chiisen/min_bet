@@ -5,10 +5,16 @@ export function processSQL(
   targetCurrency: string,
   denomIdxByMinBetListMap_,
   defaultDenomIdxByMinBetListMap_,
-  path: string
+  path: string,
+  allSql: string,
+  hallId: string
 ) {
+  let targetCid = `換上指定Hall的Cid`
+  if (hallId != null) {
+    targetCid = hallId
+  }
   const sql_ = `
-SET @targetCid = "換上指定Hall的CidS";
+SET @targetCid = "${targetCid}";
 SET @currency = "${targetCurrency}";
 
 
@@ -78,7 +84,9 @@ JOIN game.games g
 ON g.gameId = gs.gameId
 WHERE cid = @targetCid
 ) t
-ON DUPLICATE KEY UPDATE Denom = t.pb, DefaultDenomId = t.dp;`
+ON DUPLICATE KEY UPDATE Denom = t.pb, DefaultDenomId = t.dp;
+
+`
 
   if (path != null) {
     writeAlter(`./output/${path}/`, sql_, `alter_${targetCurrency}.sql`)
@@ -87,4 +95,9 @@ ON DUPLICATE KEY UPDATE Denom = t.pb, DefaultDenomId = t.dp;`
   }
 
   //console.log(sql_)
+
+  if (allSql != null) {
+    allSql += sql_
+  }
+  return allSql
 }
