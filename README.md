@@ -9,11 +9,14 @@
   - IDR、VND 1000:1 指的是只有 IDR、VND 幣別，而且 denom 只有 1000:1 
 
 # .env
-- denom預設是否1:1
-DEFAULT_DENOM_1BY1=true
+- denom預設是否1:1(true:預設1:1&&denom陣列也新增1:1,false:正常設定 ❌關閉功能,目前用【denom特化統整表.xlsx】來設定)
+DEFAULT_DENOM_1BY1
 
-- 讀表或自己算
+- 讀表或自己算(true:自己算,false:讀表)
 IS_CALCULATE
+
+- 是否匯出所有HALL的幣別設定(true:以HALL為目錄匯出)
+IS_ALL_DC_CURRENCIES
 
 一般都是讀表來進行設定denom(此值為false)
 因為設定內容沒有100%遵守公式

@@ -15,6 +15,7 @@ import { initCurrencyList, currencyList, currencyDataList } from "./currencyList
 import { initAllDCCurrencies, allDCCurrenciesMap } from "./AllDCCurrencies"
 import { initHallName } from "./hallName"
 import { initHallSetting } from "./hallSetting"
+import { initCurrency1By1 } from "./currency1By1"
 
 const envFile = ".env"
 if (!fs.existsSync(".env")) {
@@ -53,6 +54,7 @@ const excelFunkyDenomInputFileName = "./input/FUNKY_DENOM.xlsx"
 const excelAllDCCurrenciesInputFileName = "./input/AllDCCurrencies.xlsx"
 const excelHallNameInputFileName = "./input/HALL_NAME.xlsx"
 const excelHallSettingInputFileName = "./input/denom特化統整表.xlsx"
+const excelCurrency1By1InputFileName = "./input/currency1By1.xlsx"
 
 /**
  * 特別檢查 USD 的 minBet 是否小於 0.05
@@ -103,6 +105,8 @@ if (isAllDCCurrencies) {
 
   initAllDCCurrencies(excelAllDCCurrenciesInputFileName)
 
+  initCurrency1By1(excelCurrency1By1InputFileName)
+
   let totalAllSql_ = ""
   allDCCurrenciesMap.forEach((row) => {
     console.log(`DC: ${clc.red(row.dc)} - Cid: ${clc.green(row.hallId)} - Currencies: ${clc.yellow(row.currencies)}`)
@@ -117,16 +121,15 @@ if (isAllDCCurrencies) {
       })
 
       path_ += `${row.dc}/`
-    }
-    else{
+    } else {
       console.error(`路徑不存在 dc: ${clc.yellow(row.dc)}`)
     }
     currenciesArray_.forEach((x) => {
-      const findCurrency_ = currencyDataList.find(function (item, index, array) {
+      const findCurrency_ = currencyDataList.find(function (item) {
         return item.currency === x
       })
 
-      allSql_ = mainLoopAllDC(findCurrency_.currency, findCurrency_.cryDef, path_, allSql_, row.hallId)
+      allSql_ = mainLoopAllDC(findCurrency_.currency, findCurrency_.cryDef, path_, allSql_, row.hallId, row.dc)
     })
     writeAlter(`./output/${path_}`, allSql_, `all_${row.dc}_alter.sql`)
 

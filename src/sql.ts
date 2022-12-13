@@ -7,7 +7,8 @@ export function processSQL(
   defaultDenomIdxByMinBetListMap_,
   path: string,
   allSql: string,
-  hallId: string
+  hallId: string,
+  dc: string
 ) {
   let targetCid = `換上指定Hall的Cid`
   if (hallId != null) {

@@ -1,5 +1,6 @@
 import { minBetToExcelDenomListMap, minBetCurrencyToDefaultDenomNthMap } from "./minBet"
-import { default_denom_1by1 } from "./index"
+import { hallSettingMap } from "./hallSetting"
+import { currency1By1Map } from "./currency1By1"
 
 const { data } = require("58-toolkit")
 const { denomIndexToDenomString } = data
@@ -12,7 +13,9 @@ export function findTable(
   excelMinBetOutput_,
   denomIdxArray_,
   denomIdxByMinBetListMap_,
-  defaultDenomIdxByMinBetListMap_
+  defaultDenomIdxByMinBetListMap_,
+  hallId,
+  dc
 ) {
   let defaultDenomIdx_ = ""
   const keyMinBetCurrency_ = `${minBet_}-${targetCurrency}`
@@ -22,12 +25,27 @@ export function findTable(
     return
   }
   //判斷 denom 預設是否為 1:1
-  if (default_denom_1by1) {
-    const denom_1by1_index_ = 15 - 1 //索引為14(陣列由 0 開始)
-    if (excelDenomList_[denom_1by1_index_] === ``) {
-      excelDenomList_[denom_1by1_index_] = 15
+  let hallSettingData_
+  const c1By1_ = currency1By1Map.get(targetCurrency)
+  if (dc) {
+    hallSettingData_ = hallSettingMap.get(dc)
+    if (hallSettingData_ && hallSettingData_.normal_1By1) {
+      const denom_1by1_index_ = 15 - 1 //索引為14(陣列由 0 開始)
+      if (excelDenomList_[denom_1by1_index_] === ``) {
+        excelDenomList_[denom_1by1_index_] = 15
+      }
+    }
+
+    if (dc === "I8" || dc === "AOA_Hall" /* @note 有特例開放 1:1 時, I8 必須打開 1:1 */) {
+      if (c1By1_) {
+        const denom_1by1_index_ = 15 - 1 //索引為14(陣列由 0 開始)
+        if (excelDenomList_[denom_1by1_index_] === ``) {
+          excelDenomList_[denom_1by1_index_] = 15
+        }
+      }
     }
   }
+
   const excelDenomStringList_ = []
   denomIdxArray_ = ""
   const denomList_ = []
@@ -53,7 +71,7 @@ export function findTable(
   const keyDefaultMinBetCurrency_ = `${minBet_}-${targetCurrency}`
   const defaultDenomNth_ = minBetCurrencyToDefaultDenomNthMap.get(keyDefaultMinBetCurrency_)
   //判斷 denom 預設是否為 1:1
-  if (default_denom_1by1) {
+  if (hallSettingData_ && hallSettingData_.normal_1By1) {
     defaultDenomIdx_ = `15` // 預設為 1:1
   } else {
     const defaultDenomNthIndex_ = defaultDenomNth_ - 1
@@ -64,6 +82,12 @@ export function findTable(
       )
     }
     defaultDenomIdx_ = denomList_[defaultDenomNthIndex_]
+  }
+
+  if (dc === "I8" || dc === "AOA_Hall" /* @note 有特例開放 1:1 時, I8 必須打開預設 1:1 */) {
+    if (c1By1_) {
+      defaultDenomIdx_ = `15` // 預設為 1:1
+    }
   }
 
   const defaultDenomString_ = denomIndexToDenomString(defaultDenomIdx_)
