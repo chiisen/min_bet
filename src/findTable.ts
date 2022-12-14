@@ -1,6 +1,8 @@
 import { minBetToExcelDenomListMap, minBetCurrencyToDefaultDenomNthMap } from "./minBet"
 import { hallSettingMap } from "./hallSetting"
 import { currency1By1Map } from "./currency1By1"
+import { funkyDenomMapByMinBet } from "./funkyDenom"
+import { unwatchFile } from "fs"
 
 const { data } = require("58-toolkit")
 const { denomIndexToDenomString } = data
@@ -38,6 +40,16 @@ export function findTable(
     }
 
     if (dc === "I8" || dc === "AOA_Hall" /* @note 有特例開放 1:1 時, I8 必須打開 1:1 */) {
+      // @note I8 與 AOA 特化
+      const keyMinBetCurrency_ = `${minBet_}-${targetCurrency}`
+      const funkyDenomData_ = funkyDenomMapByMinBet.get(keyMinBetCurrency_)
+      if (funkyDenomData_) {
+        console.log(
+          `dc: ${dc} minBet: ${funkyDenomData_.minBet} denom: ${funkyDenomData_.denom}  defaultDenomId: ${funkyDenomData_.defaultDenomId} currency: ${targetCurrency}`
+        )
+      } else {
+        console.warn(`dc: ${dc} - FUNKY 沒有 MinBet-Currency: ${minBet_}-${targetCurrency} 的資料`)
+      }
       if (c1By1_) {
         const denom_1by1_index_ = 15 - 1 //索引為14(陣列由 0 開始)
         if (excelDenomListTemp_[denom_1by1_index_] === ``) {
@@ -86,6 +98,7 @@ export function findTable(
   }
 
   if (dc === "I8" || dc === "AOA_Hall" /* @note 有特例開放 1:1 時, I8 必須打開預設 1:1 */) {
+    // @note I8 與 AOA 特化
     if (c1By1_) {
       defaultDenomIdx_ = `15` // 預設為 1:1
     }

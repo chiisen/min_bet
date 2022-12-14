@@ -94,9 +94,9 @@ if (!isCalculate) {
   initI8Denom(excelI8DenomInputFileName)
 
   initGameDenom(excelGameDenomInputFileName)
-
-  initFunkyDenom(excelFunkyDenomInputFileName)
 }
+
+initFunkyDenom(excelFunkyDenomInputFileName)
 
 if (isAllDCCurrencies) {
   initHallSetting(excelHallSettingInputFileName)

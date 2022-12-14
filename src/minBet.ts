@@ -1,4 +1,5 @@
 import clc = require("cli-color")
+import console = require("console")
 
 const { excel, convert } = require("58-toolkit")
 const { getExcel } = excel
@@ -76,7 +77,9 @@ export function initMinBetMainLoop(currencyList, excelMinBetInputFileName, excel
           }
           gameIdCurrencyToExcelDenomListMap.set(keyGameIdCurrency_, excelDenomList_)
         } else {
-          console.log(`${gameId_}-${cur} 找不到`)
+          if (minBet_ > 0) {
+            console.log(`${gameId_}-${cur} 找不到`) // 未上線的遊戲，會找不到
+          }
         }
       })
     }
@@ -159,6 +162,12 @@ function initMinBet(minBetId, minBetSheet) {
       ]
 
       const defaultDenomNth_ = row[32] //第幾個denom
+
+      if(currency == "CNY" && minBetId === 40){
+
+        console.log('')
+
+      }
 
       const keyDefaultMinBetCurrency_ = `${minBetId}-${currency}`
       if (defaultDenomNth_ === 0) {
