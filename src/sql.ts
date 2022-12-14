@@ -45,9 +45,9 @@ SET @p88 = "${denomIdxByMinBetListMap_.get(88)}";
 SET @dp88 = "${defaultDenomIdxByMinBetListMap_.get(88)}";
 
 INSERT INTO game.game_denom_setting
-SELECT cId, gameId, currency, pb, dp ,null,0 FROM
+SELECT @targetCid as cId, gameId, currency, pb, dp ,null,0 FROM
 (
-SELECT gs.cId, gs.gameId, @currency as currency,
+SELECT @targetCid, g.gameId, @currency as currency,
 CASE 
 WHEN g.minbet = 1 THEN @p1 
 WHEN g.minbet = 3 THEN @p3 
@@ -80,10 +80,7 @@ ELSE @dp1 END as dp,
 
 null, 
 0
-FROM game.game_setting gs
-JOIN game.games g 
-ON g.gameId = gs.gameId
-WHERE cid = @targetCid
+FROM game.games g
 ) t
 ON DUPLICATE KEY UPDATE Denom = t.pb, DefaultDenomId = t.dp;
 

@@ -24,6 +24,7 @@ export function findTable(
     console.error(`找不到 ${keyMinBetCurrency_} 的資料`)
     return
   }
+  const excelDenomListTemp_ = [...excelDenomList_]
   //判斷 denom 預設是否為 1:1
   let hallSettingData_
   const c1By1_ = currency1By1Map.get(targetCurrency)
@@ -31,16 +32,16 @@ export function findTable(
     hallSettingData_ = hallSettingMap.get(dc)
     if (hallSettingData_ && hallSettingData_.normal_1By1) {
       const denom_1by1_index_ = 15 - 1 //索引為14(陣列由 0 開始)
-      if (excelDenomList_[denom_1by1_index_] === ``) {
-        excelDenomList_[denom_1by1_index_] = 15
+      if (excelDenomListTemp_[denom_1by1_index_] === ``) {
+        excelDenomListTemp_[denom_1by1_index_] = 15
       }
     }
 
     if (dc === "I8" || dc === "AOA_Hall" /* @note 有特例開放 1:1 時, I8 必須打開 1:1 */) {
       if (c1By1_) {
         const denom_1by1_index_ = 15 - 1 //索引為14(陣列由 0 開始)
-        if (excelDenomList_[denom_1by1_index_] === ``) {
-          excelDenomList_[denom_1by1_index_] = 15
+        if (excelDenomListTemp_[denom_1by1_index_] === ``) {
+          excelDenomListTemp_[denom_1by1_index_] = 15
         }
       }
     }
@@ -49,7 +50,7 @@ export function findTable(
   const excelDenomStringList_ = []
   denomIdxArray_ = ""
   const denomList_ = []
-  excelDenomList_.forEach((x) => {
+  excelDenomListTemp_.forEach((x) => {
     if (x) {
       const denomString_ = denomIndexToDenomString(x)
       excelDenomStringList_.push(denomString_)
