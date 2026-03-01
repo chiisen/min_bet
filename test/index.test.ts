@@ -1,8 +1,8 @@
 import { hello } from "../src"
 
-/**
- * 單元測試用
- */
-test("hello", () => {
-  expect(hello("World")).toEqual("Hello World")
+describe("index.ts tests", () => {
+  test("hello function returns correct greeting", () => {
+    expect(hello("World")).toBe("Hello World")
+    expect(hello("Alice")).toBe("Hello Alice")
+  })
 })
